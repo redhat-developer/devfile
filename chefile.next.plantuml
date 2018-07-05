@@ -13,7 +13,6 @@ class CheWorkspace {
   - plugins
   - runtimes
   - commands
-  - postloadActions
   - projects
 }
 

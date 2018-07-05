@@ -2,16 +2,13 @@
 
 class DevelopmentEnvironment {
   - name
-  - plugins
-  - runtimes
+  - tools
   - commands
-  - postloadActions
   - projects
 }
 
 together {
   class DevelopmentTool
-  class RuntimeEnvironment
   class Command
   class Project
 }
@@ -23,7 +20,6 @@ together {
 
 
 DevelopmentEnvironment *-- "n" DevelopmentTool
-DevelopmentEnvironment *-- "n" RuntimeEnvironment
 DevelopmentEnvironment *-- "n" Command
 DevelopmentEnvironment *-- "n" Project
 
@@ -34,12 +30,6 @@ class DevelopmentTool {
     - definition
 }
 
-class RuntimeEnvironment {
-    - attributes
-    - definition
-}
-
-RuntimeEnvironment o-- CloudAppDefinition
 DevelopmentTool o-- CloudAppDefinition
 
 CloudAppDefinition <|-.. DockerImage
@@ -57,7 +47,7 @@ class Command {
 }
 
 Command *-- "n" ContainerExec
-ContainerExec o-- RuntimeEnvironment
+ContainerExec o-- DevelopmentTool
 
 class ContainerExec {
   - cloudApp
