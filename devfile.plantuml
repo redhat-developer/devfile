@@ -2,8 +2,8 @@
 
 class DevelopmentEnvironment {
   - name
-  - tools
   - commands
+  - tools
   - projects
 }
 
