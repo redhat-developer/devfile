@@ -1,0 +1,79 @@
+@startuml
+
+class DevelopmentEnvironment {
+  - name
+  - plugins
+  - runtimes
+  - commands
+  - postloadActions
+  - projects
+}
+
+together {
+  class DevelopmentTool
+  class RuntimeEnvironment
+  class Command
+  class Project
+}
+
+together {
+  class ContainerExec
+  class CloudAppDefinition
+}
+
+
+DevelopmentEnvironment *-- "n" DevelopmentTool
+DevelopmentEnvironment *-- "n" RuntimeEnvironment
+DevelopmentEnvironment *-- "n" Command
+DevelopmentEnvironment *-- "n" Project
+
+class DevelopmentTool {
+    - attributes
+    - version
+    - dependencies
+    - definition
+}
+
+class RuntimeEnvironment {
+    - attributes
+    - definition
+}
+
+RuntimeEnvironment o-- CloudAppDefinition
+DevelopmentTool o-- CloudAppDefinition
+
+CloudAppDefinition <|-.. DockerImage
+CloudAppDefinition <|-.. Dockerfile
+CloudAppDefinition <|-.. Composefile
+CloudAppDefinition <|-.. OpenShiftResources
+CloudAppDefinition <|-.. KubernetesResources
+CloudAppDefinition <|-.. HelmChart
+
+class Command {
+  - name
+  - type
+  - containerExec
+  - attributes
+}
+
+Command *-- "n" ContainerExec
+ContainerExec o-- RuntimeEnvironment
+
+class ContainerExec {
+  - cloudApp
+  - runtime
+}
+
+class Project {
+  - type
+  - name
+  - source
+}
+
+Project o-- "1" ProjectSource
+
+class ProjectSource {
+  - type
+  - location
+}
+@enduml
