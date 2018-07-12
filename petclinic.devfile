@@ -1,0 +1,10 @@
+---
+name: petclinic-front-team
+commands:
+  - name: mvn-build
+    type: exec
+    command: mvn clean install
+  - name: run
+    type: exec
+
+  - name: debug
