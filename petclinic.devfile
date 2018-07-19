@@ -1,10 +1,49 @@
 ---
-name: petclinic-front-team
+name: petclinic-dev-environment
+projects:
+  - name: petclinic
+    source:
+      type: git
+      location: 'git@github.com:spring-projects/spring-petclinic.git'
+tools:
+  - name: mvn-stack
+    definition:
+      dockerImage:
+        image: maven:3.5.4-jdk-8
+        entryPoint: sleep infinity
+        persitentVolumes:
+          - name: maven-repo
+            containerPath: /root/.m2
+        services:
+          - name: spring-boot
+            port: 8080
+    mountProjectsSources: true
+  - name: mysql
+    definition:
+      composeFile:
+        localfile: docker-compose.yml
+  - name: theia-ide
+    definition:
+      chePlugin:
+        name: theia:0.0.3
+  - name: jdt.ls
+    definition:
+      chePlugin:
+        name: theia-jdtls:0.0.3
 commands:
-  - name: mvn-build
-    type: exec
-    command: mvn clean install
+  - name: build
+    toolsCommands:
+      - tool: mvn-stack
+        action:
+          exec:
+            command: mvn package
+            workdir: /projects/spring-petclinic 
   - name: run
-    type: exec
-
-  - name: debug
+    toolsCommands:
+      - tool: mysql
+        action: start
+      - tool: mvn-stack
+        action:
+          exec:
+            command: mvn spring-boot:run
+            workdir: /projects/spring-petclinic 

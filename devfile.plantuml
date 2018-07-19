@@ -14,48 +14,66 @@ together {
 }
 
 together {
-  class ContainerExec
+  class ToolCommand
   class CloudAppDefinition
 }
-
 
 DevelopmentEnvironment *-- "n" DevelopmentTool
 DevelopmentEnvironment *-- "n" Command
 DevelopmentEnvironment *-- "n" Project
 
 class DevelopmentTool {
-    - attributes
+    - name
     - version
-    - dependencies
+    - attributes
     - definition
+    - mountProjectsSources
 }
 
 DevelopmentTool o-- CloudAppDefinition
 
 CloudAppDefinition <|-.. DockerImage
 CloudAppDefinition <|-.. Dockerfile
-CloudAppDefinition <|-.. Composefile
+CloudAppDefinition <|-.. ComposeFile
 CloudAppDefinition <|-.. OpenShiftResources
 CloudAppDefinition <|-.. KubernetesResources
 CloudAppDefinition <|-.. HelmChart
+CloudAppDefinition <|-.. ChePlugin
 
 class Command {
   - name
   - type
-  - containerExec
   - attributes
+  - toolsCommands
 }
 
-Command *-- "n" ContainerExec
-ContainerExec o-- DevelopmentTool
+Command *-- "n" ToolCommand
+ToolCommand o-- DevelopmentTool
 
-class ContainerExec {
-  - cloudApp
-  - runtime
+class ToolCommand {
+  - tool
+  - action
+}
+
+ToolCommand o-- "1" ContainerAction
+
+ContainerAction <|-..Exec
+ContainerAction <|-..Start
+ContainerAction <|-..Stop
+
+together {
+  class Exec
+  class Start
+  class Stop
+}
+
+class Exec {
+  - command
+  - args
+  - workdir
 }
 
 class Project {
-  - type
   - name
   - source
 }
@@ -66,4 +84,44 @@ class ProjectSource {
   - type
   - location
 }
+
+class DockerImage {
+  - image
+  - env
+  - entryPoint
+  - persistentVolumes
+}
+
+DockerImage *-- "n" PersistentVolume
+
+class PersistentVolume {
+  - name
+  - containerPath
+}
+
+class ComposeFile {
+  - localFile
+}
+
+class Dockerfile {
+  - localFile
+}
+
+class OpenShiftResources {
+  - localFile
+}
+
+class KubernetesResources {
+  - localFile
+}
+
+class HelmChart {
+  - localFile
+}
+
+class ChePlugin {
+  - name
+  - registry
+}
+
 @enduml
