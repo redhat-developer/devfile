@@ -1,6 +1,7 @@
 @startuml
 
 class DevelopmentEnvironment {
+  - version
   - name
   - commands
   - tools
