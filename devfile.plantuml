@@ -1,4 +1,4 @@
-@startuml
+@startuml devfile
 
 class DevelopmentEnvironment {
   - version
@@ -101,23 +101,23 @@ class PersistentVolume {
 }
 
 class ComposeFile {
-  - localFile
+  - local
 }
 
 class Dockerfile {
-  - localFile
+  - local
 }
 
 class OpenShiftResources {
-  - localFile
+  - local
 }
 
 class KubernetesResources {
-  - localFile
+  - local
 }
 
 class HelmChart {
-  - localFile
+  - local
 }
 
 class ChePlugin {

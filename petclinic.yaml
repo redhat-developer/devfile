@@ -12,7 +12,7 @@ tools:
       dockerImage:
         image: maven:3.5.4-jdk-8
         entryPoint: sleep infinity
-        persitentVolumes:
+        persistentVolumes:
           - name: maven-repo
             containerPath: /root/.m2
         services:
@@ -22,7 +22,7 @@ tools:
   - name: mysql
     definition:
       composeFile:
-        localfile: docker-compose.yml
+        local: docker-compose.yml
   - name: theia-ide
     definition:
       chePlugin:
