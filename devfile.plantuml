@@ -122,12 +122,12 @@ class HelmChart {
 }
 
 class ChePlugin {
-  - name
+  - id
   - registry
 }
 
 class CheEditor {
-  - name
+  - id
   - registry
 }
 

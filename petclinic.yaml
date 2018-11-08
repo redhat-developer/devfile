@@ -8,29 +8,25 @@ projects:
       location: 'git@github.com:spring-projects/spring-petclinic.git'
 tools:
   - name: mvn-stack
-    definition:
-      dockerImage:
-        image: maven:3.5.4-jdk-8
-        entryPoint: sleep infinity
-        persistentVolumes:
-          - name: maven-repo
-            containerPath: /root/.m2
-        services:
-          - name: spring-boot
-            port: 8080
+    type: dockerImage
+    image: maven:3.5.4-jdk-8
+    entryPoint: sleep infinity
+    persistentVolumes:
+      - name: maven-repo
+        containerPath: /root/.m2
+    services:
+      - name: spring-boot
+        port: 8080
     mountProjectsSources: true
   - name: mysql
-    definition:
-      composeFile:
-        local: docker-compose.yml
+    type: composeFile
+    local: docker-compose.yml
   - name: theia-ide
-    definition:
-      cheEditor:
-        name: eclipse/theia:0.0.3
+    type: cheEditor
+    id: eclipse/theia:0.0.3
   - name: jdt.ls
-    definition:
-      chePlugin:
-        name: eclipse/theia-jdtls:0.0.3
+    type: chePlugin
+    id: eclipse/theia-jdtls:0.0.3
 actions:
   - name: build
     items:
@@ -48,4 +44,4 @@ actions:
         action:
           type: exec
           command: mvn spring-boot:run
-          workdir: /projects/spring-petclinic 
+          workdir: /projects/spring-petclinic
