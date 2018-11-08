@@ -47,6 +47,7 @@ class Action {
   - type
   - attributes
   - tool
+  - timeout
 }
 
 Action *-- "n" ToolAction

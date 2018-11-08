@@ -35,10 +35,14 @@ actions:
         command: mvn package
         workdir: /projects/spring-petclinic
   - name: run
+    attributes:
+      runType: sequential
     items:
       - type: start
         tool: mysql
+        timeout: 20s
       - type: exec
         tool: mvn-stack
         command: mvn spring-boot:run
         workdir: /projects/spring-petclinic
+
