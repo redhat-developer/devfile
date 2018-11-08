@@ -40,6 +40,7 @@ CloudAppDefinition <|-.. OpenShiftResources
 CloudAppDefinition <|-.. KubernetesResources
 CloudAppDefinition <|-.. HelmChart
 CloudAppDefinition <|-.. ChePlugin
+CloudAppDefinition <|-.. CheEditor
 
 class Command {
   - name
@@ -121,6 +122,11 @@ class HelmChart {
 }
 
 class ChePlugin {
+  - name
+  - registry
+}
+
+class CheEditor {
   - name
   - registry
 }
