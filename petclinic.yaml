@@ -33,18 +33,19 @@ tools:
         name: eclipse/theia-jdtls:0.0.3
 actions:
   - name: build
-    toolsActions:
+    items:
       - tool: mvn-stack
         action:
-          exec:
-            command: mvn package
-            workdir: /projects/spring-petclinic 
+          type: exec
+          command: mvn package
+          workdir: /projects/spring-petclinic 
   - name: run
-    toolsActions:
+    items:
       - tool: mysql
-        action: start
+        action: 
+          type: start
       - tool: mvn-stack
         action:
-          exec:
-            command: mvn spring-boot:run
-            workdir: /projects/spring-petclinic 
+          type: exec
+          command: mvn spring-boot:run
+          workdir: /projects/spring-petclinic 

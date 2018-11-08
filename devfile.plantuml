@@ -57,19 +57,19 @@ class ToolAction {
   - action
 }
 
-ToolAction o-- "1" ContainerAction
+ToolAction o-- "1" ActionType
 
-ContainerAction <|-..Exec
-ContainerAction <|-..Start
-ContainerAction <|-..Stop
+ActionType <|-..ContainerExec
+ActionType <|-..ContainerStart
+ActionType <|-..ContainerStop
 
 together {
-  class Exec
-  class Start
-  class Stop
+  class ContainerExec
+  class ContainerStart
+  class ContainerStop
 }
 
-class Exec {
+class ContainerExec {
   - command
   - args
   - workdir
