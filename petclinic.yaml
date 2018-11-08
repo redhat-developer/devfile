@@ -31,16 +31,16 @@ tools:
     definition:
       chePlugin:
         name: eclipse/theia-jdtls:0.0.3
-commands:
+actions:
   - name: build
-    toolsCommands:
+    toolsActions:
       - tool: mvn-stack
         action:
           exec:
             command: mvn package
             workdir: /projects/spring-petclinic 
   - name: run
-    toolsCommands:
+    toolsActions:
       - tool: mysql
         action: start
       - tool: mvn-stack
