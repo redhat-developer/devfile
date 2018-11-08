@@ -25,12 +25,12 @@ tools:
         local: docker-compose.yml
   - name: theia-ide
     definition:
-      chePlugin:
-        name: theia:0.0.3
+      cheEditor:
+        name: eclipse/theia:0.0.3
   - name: jdt.ls
     definition:
       chePlugin:
-        name: theia-jdtls:0.0.3
+        name: eclipse/theia-jdtls:0.0.3
 commands:
   - name: build
     toolsCommands:
