@@ -27,9 +27,9 @@ tools:
   - name: jdt.ls
     type: chePlugin
     id: eclipse/theia-jdtls:0.0.3
-actions:
+commands:
   - name: build
-    items:
+    actions:
       - type: exec
         tool: mvn-stack
         command: mvn package
@@ -37,7 +37,7 @@ actions:
   - name: run
     attributes:
       runType: sequential
-    items:
+    actions:
       - type: start
         tool: mysql
         timeout: 20s

@@ -3,14 +3,14 @@
 class DevelopmentEnvironment {
   - version
   - name
-  - actions
+  - commands
   - tools
   - projects
 }
 
 together {
   class DevelopmentTool
-  class Action
+  class Command
   class Project
 }
 
@@ -20,7 +20,7 @@ together {
 }
 
 DevelopmentEnvironment *-- "n" DevelopmentTool
-DevelopmentEnvironment *-- "n" Action
+DevelopmentEnvironment *-- "n" Command
 DevelopmentEnvironment *-- "n" Project
 
 class DevelopmentTool {
@@ -42,7 +42,7 @@ CloudAppDefinition <|-.. HelmChart
 CloudAppDefinition <|-.. ChePlugin
 CloudAppDefinition <|-.. CheEditor
 
-class Action {
+class Command {
   - name
   - type
   - attributes
@@ -50,7 +50,7 @@ class Action {
   - timeout
 }
 
-Action *-- "n" ToolAction
+Command *-- "n" ToolAction
 ToolAction o-- DevelopmentTool
 
 class ToolAction {
