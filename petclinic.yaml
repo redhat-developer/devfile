@@ -19,8 +19,8 @@ tools:
         port: 8080
     mountProjectsSources: true
   - name: mysql
-    type: composeFile
-    local: docker-compose.yml
+    type: kubernetes
+    local: kubernetes-mysql.yml
   - name: theia-ide
     type: cheEditor
     id: eclipse/theia:0.0.3
