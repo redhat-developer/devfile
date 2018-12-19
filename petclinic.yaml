@@ -1,5 +1,5 @@
 ---
-version: 0.0.1
+specVersion: 0.0.1
 name: petclinic-dev-environment
 projects:
   - name: petclinic
