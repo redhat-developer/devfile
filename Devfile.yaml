@@ -11,13 +11,18 @@ tools:
     type: dockerImage
     image: maven:3.5.4-jdk-8
     entryPoint: sleep infinity
-    persistentVolumes:
+    volumes:
       - name: maven-repo
-        containerPath: /root/.m2
-    services:
+        mountPath: /root/.m2
+      - name: projects
+        mountPath: /projects
+    endpoints:
       - name: spring-boot
-        port: 8080
-    mountProjectsSources: true
+        public: true
+        targetPort: 8080
+        attributes:
+          protocol: http
+          secure: false
   - name: mysql
     type: kubernetes
     local: petclinic.yaml
