@@ -20,7 +20,11 @@ tools:
     mountProjectsSources: true
   - name: mysql
     type: kubernetes
-    local: kubernetes-mysql.yml
+    local: petclinic.yaml
+    selector:
+      app.kubernetes.io/name: mysql
+      app.kubernetes.io/component: database
+      app.kubernetes.io/part-of: petclinic
   - name: theia-ide
     type: cheEditor
     id: eclipse/theia:0.0.3
@@ -45,4 +49,3 @@ commands:
         tool: mvn-stack
         command: mvn spring-boot:run
         workdir: /projects/spring-petclinic
-
