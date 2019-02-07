@@ -4,7 +4,7 @@
 ```
 ```
 
-This schema describes the structure of the devfile object
+This schema described the structure of the devfile object
 
 | Abstract | Extensible | Status | Identifiable | Custom Properties | Additional Properties | Defined In |
 |----------|------------|--------|--------------|-------------------|-----------------------|------------|
@@ -51,7 +51,7 @@ All items must be of the type:
 #### actions
 ##### The Command Actions List
 
-List of the actions of given command
+List of the actions of given command. Now the only one command must be specified in list but there are plans to implement supporting multiple actions commands.
 
 `actions`
 
@@ -345,80 +345,38 @@ Describes the project's source - type and location
 
 ##### source Type
 
-
-`object` with following properties:
-
-
-| Property | Type | Required |
-|----------|------|----------|
-| `location`| string | **Required** |
-| `type`| string | **Required** |
-
-
-
-#### location
-
-Project's source location address. Should be URL for git and github located projects, or file:// for zip.
-
-`location`
-
-* is **required**
-* type: `string`
-
-##### location Type
-
-
-`string`
-
-
-
-
-
-
-##### location Example
+Unknown type `object`.
 
 ```json
-git@github.com:spring-projects/spring-petclinic.git
+{
+  "type": "object",
+  "title": "The Project Source object",
+  "description": "Describes the project's source - type and location",
+  "required": [
+    "type",
+    "location"
+  ],
+  "properties": {
+    "type": {
+      "type": "string",
+      "description": "Project's source type.",
+      "examples": [
+        "git",
+        "github",
+        "zip"
+      ]
+    },
+    "location": {
+      "type": "string",
+      "description": "Project's source location address. Should be URL for git and github located projects, or file:// for zip.",
+      "examples": [
+        "git@github.com:spring-projects/spring-petclinic.git"
+      ]
+    }
+  },
+  "simpletype": "`object`"
+}
 ```
-
-
-
-
-#### type
-
-Project's source type.
-
-`type`
-
-* is **required**
-* type: `string`
-
-##### type Type
-
-
-`string`
-
-
-
-
-
-
-##### type Examples
-
-```json
-git
-```
-
-```json
-github
-```
-
-```json
-zip
-```
-
-
-
 
 
 
@@ -632,3 +590,12 @@ cheEditor
 ```json
 kubernetes
 ```
+
+
+
+
+
+
+
+
+
