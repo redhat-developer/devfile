@@ -26,9 +26,9 @@ This schema describes the structure of the devfile object
 Description of the predefined commands to be available in workspace
 
 `commands`
-
 * is optional
 * type: `object[]`
+
 * defined in this schema
 
 ### commands Type
@@ -54,7 +54,6 @@ All items must be of the type:
 List of the actions of given command. Now the only one command must be specified in list but there are plans to implement supporting multiple actions commands.
 
 `actions`
-
 * is **required**
 * type: `object[]`
 
@@ -82,7 +81,6 @@ All items must be of the type:
 The actual action command-line string
 
 `command`
-
 * is **required**
 * type: `string`
 
@@ -90,7 +88,6 @@ The actual action command-line string
 
 
 `string`
-
 
 
 
@@ -110,7 +107,6 @@ mvn package
 Describes tool to which given action relates
 
 `tool`
-
 * is **required**
 * type: `string`
 
@@ -118,7 +114,6 @@ Describes tool to which given action relates
 
 
 `string`
-
 
 
 
@@ -138,7 +133,6 @@ mvn-stack
 Describes action type
 
 `type`
-
 * is **required**
 * type: `string`
 
@@ -146,7 +140,6 @@ Describes action type
 
 
 `string`
-
 
 
 
@@ -166,7 +159,6 @@ exec
 Working directory where the command should be executed
 
 `workdir`
-
 * is optional
 * type: `string`
 
@@ -174,7 +166,6 @@ Working directory where the command should be executed
 
 
 `string`
-
 
 
 
@@ -201,7 +192,6 @@ Working directory where the command should be executed
 Additional command attributes
 
 `attributes`
-
 * is optional
 * type: reference
 
@@ -221,7 +211,6 @@ Additional command attributes
 Describes the name of the command. Should be unique per commands set.
 
 `name`
-
 * is **required**
 * type: `string`
 
@@ -229,7 +218,6 @@ Describes the name of the command. Should be unique per commands set.
 
 
 `string`
-
 
 
 
@@ -255,7 +243,6 @@ build
 The name of the devfile. Workspaces created from devfile, will inherit this name
 
 `name`
-
 * is **required**
 * type: `string`
 * defined in this schema
@@ -264,7 +251,6 @@ The name of the devfile. Workspaces created from devfile, will inherit this name
 
 
 `string`
-
 
 
 
@@ -283,9 +269,9 @@ The name of the devfile. Workspaces created from devfile, will inherit this name
 Description of the projects, containing names and sources locations
 
 `projects`
-
 * is optional
 * type: `object[]`
+
 * defined in this schema
 
 ### projects Type
@@ -310,7 +296,6 @@ All items must be of the type:
 undefined
 
 `name`
-
 * is **required**
 * type: `string`
 
@@ -318,7 +303,6 @@ undefined
 
 
 `string`
-
 
 
 
@@ -339,7 +323,6 @@ petclinic
 Describes the project's source - type and location
 
 `source`
-
 * is **required**
 * type: `object`
 
@@ -393,7 +376,6 @@ Unknown type `object`.
 ### Devfile Specification Version
 
 `specVersion`
-
 * is **required**
 * type: `string`
 * defined in this schema
@@ -402,7 +384,6 @@ Unknown type `object`.
 
 
 `string`
-
 
 
 
@@ -421,9 +402,9 @@ Unknown type `object`.
 Description of the workspace tools, such as editor and plugins
 
 `tools`
-
 * is **required**
 * type: `object[]`
+
 * defined in this schema
 
 ### tools Type
@@ -450,7 +431,6 @@ All items must be of the type:
 Describes the tool FQN
 
 `id`
-
 * is optional
 * type: `string`
 
@@ -458,7 +438,6 @@ Describes the tool FQN
 
 
 `string`
-
 
 
 
@@ -478,7 +457,6 @@ eclipse/maven-jdk8:1.0.0
 Describes location of Kubernetes list yaml file. Applicable only for 'kubernetes' and 'openshift' type tools
 
 `local`
-
 * is optional
 * type: `string`
 
@@ -486,7 +464,6 @@ Describes location of Kubernetes list yaml file. Applicable only for 'kubernetes
 
 
 `string`
-
 
 
 
@@ -506,7 +483,6 @@ petclinic-app.yaml
 Describes the name of the tool. Should be unique per tool set.
 
 `name`
-
 * is **required**
 * type: `string`
 
@@ -514,7 +490,6 @@ Describes the name of the tool. Should be unique per tool set.
 
 
 `string`
-
 
 
 
@@ -534,7 +509,6 @@ mvn-stack
 Describes the objects selector for the recipe type tools. Allows to pick-up only selected items from k8s/openshift list
 
 `selector`
-
 * is optional
 * type: reference
 
@@ -563,7 +537,6 @@ Describes the objects selector for the recipe type tools. Allows to pick-up only
 Describes type of the tool, e.g. whether it is an plugin or editor or other type
 
 `type`
-
 * is **required**
 * type: `string`
 
@@ -571,7 +544,6 @@ Describes type of the tool, e.g. whether it is an plugin or editor or other type
 
 
 `string`
-
 
 
 
