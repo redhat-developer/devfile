@@ -4,7 +4,7 @@
 ```
 ```
 
-This schema describedd the structure of the devfile object
+This schema describes the structure of the devfile object
 
 | Abstract | Extensible | Status | Identifiable | Custom Properties | Additional Properties | Defined In |
 |----------|------------|--------|--------------|-------------------|-----------------------|------------|
