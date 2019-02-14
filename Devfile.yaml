@@ -8,16 +8,24 @@ projects:
       location: 'git@github.com:spring-projects/spring-petclinic.git'
 tools:
   - name: mvn-stack
-    type: dockerImage
+    type: dockerimage
     image: maven:3.5.4-jdk-8
     entryPoint: sleep infinity
-    persistentVolumes:
+    volumes:
       - name: maven-repo
         containerPath: /root/.m2
-    services:
+    endpoints:
       - name: spring-boot
         port: 8080
-    mountProjectsSources: true
+        attributes:
+          path: /api
+          protocol: http
+          public: true
+    env:
+      - name: TERM
+        value: xterm
+    mountSources: true
+    memoryLimit: 500M
   - name: mysql
     type: kubernetes
     local: petclinic.yaml
