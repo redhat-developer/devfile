@@ -10,7 +10,8 @@ tools:
   - name: mvn-stack
     type: dockerimage
     image: maven:3.5.4-jdk-8
-    entryPoint: sleep infinity
+    command: ['/bin/sh', '-c']
+    args: ['tail -f /dev/null']
     volumes:
       - name: maven-repo
         containerPath: /root/.m2
