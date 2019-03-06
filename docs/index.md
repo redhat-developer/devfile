@@ -1,952 +1,187 @@
 
-# Devfile object Schema
+
+### Introduction
+Previously, two kind of recipes were available to bootstrap a cloud developer workspace and to make it portable: [Chefile](https://www.eclipse.org/che/docs/chefile.html) 
+and [Factories](https://www.eclipse.org/che/docs/factories-getting-started.html#try-a-factory).
+As a continuation of this, the brand new `devfile` format was introduced, which combines simplicity and support for high variety of different tools available to develop a container based application.
+
+### What the devfile consists of
+The minimal devfile sufficient to run a workspace from it, consists of the following parts:
+ - Specification version
+ - Name
+ - A list of tools: the development tools and user runtimes 
+ 
+To get more functional workspace, the following parts can be added:
+ - A list of projects: the source code repositories
+ - A list of commands: actions to manage the workspace components like running the dev tools, starting the runtime environments etc...
+
+Example of the minimal devfile with project and standard plugins set (Theia editor + exec plugin):
 
 ```
+
+---
+specVersion: 0.0.1
+name: petclinic-dev-environment
+projects:
+  - name: petclinic
+    source:
+      type: git
+      location: 'git@github.com:spring-projects/spring-petclinic.git'
+tools:
+  - name: theia-editor
+    type: cheEditor
+    id: org.eclipse.che.editor.theia:1.0.0
+  - name: exec-plugin
+    type: chePlugin
+    id: che-machine-exec-plugin:0.0.1
+```
+ 
+For the detailed explanation of all devfile components assignment and possible values, please see the following resources:
+ - [Specification repository](https://github.com/redhat-developer/devfile)  
+ - [detailed json-schema documentation](https://redhat-developer.github.io/devfile/devfile).
+
+### Getting Started
+The simplest way to use devfile is to have it deployed into GitHub source repository and then create factory from this repo.
+This is as simple as create `.devfile` file in the root of your GH repo, and then execute the factory: 
+```
+https://<your-che-host>/f?url=https://github.com/mygroup/myrepo
 ```
 
-This schema describes the structure of the devfile object
+Also, it is possible to execute devfile by constructing the factory with the URL to it's raw content, for example, 
+```
+https://<your-che-host>/f?url=https://pastebin.com/raw/ux6iCGaW
+``` 
+or sending a devfile to a dedicated REST API using curl/swagger, which will create new workspace and return it's configuration: 
+```
+curl -X POST  -H "Authorization: <TOKEN>" -H "Content-Type: application/yaml" -d <devlile_content> https://<your-che-host>/api/devfile
+``` 
 
-| Abstract | Extensible | Status | Identifiable | Custom Properties | Additional Properties | Defined In |
-|----------|------------|--------|--------------|-------------------|-----------------------|------------|
-| Can be instantiated | Yes | Experimental | No | Forbidden | Forbidden | [devfile.json](devfile.json) |
-
-# Devfile object Properties
-
-| Property | Type | Required | Defined by |
-|----------|------|----------|------------|
-| [commands](#commands) | `object[]` | Optional | Devfile object (this schema) |
-| [name](#name) | `string` | **Required** | Devfile object (this schema) |
-| [projects](#projects) | `object[]` | Optional | Devfile object (this schema) |
-| [specVersion](#specversion) | `string` | **Required** | Devfile object (this schema) |
-| [tools](#tools) | `object[]` | **Required** | Devfile object (this schema) |
-
-## commands
-### The Commands List
-
-Description of the predefined commands to be available in workspace
-
-`commands`
-* is optional
-* type: `object[]`
-
-* defined in this schema
-
-### commands Type
+If you're a user of `chectl` tool, it is also possible to execute workspace from devfile, using `workspace:start` command 
+parameter as follows:
+```
+chectl workspace:start --devfile=.devfile
+```` 
+Please note that currently this way only works for the local (same machine) devfiles - URL can't be used here atm.
 
 
-Array type: `object[]`
+ 
+### Supported Tool types
+There are currently four types of tools supported. There is two simpler types, such as `cheEditor` and `chePlugin` and 
+two more complex - `kubernetes` (or `openshift`) and `dockerimage`.
+Please note that all tools inside single devfile must have unique names.
+Detailed tool types explanation below:
 
-All items must be of the type:
-`object` with following properties:
+#### cheEditor 
+Describes the editor which used in workspace by defining it's id. 
+Devfile can only contain one tool with `cheEditor` type.
 
-
-| Property | Type | Required |
-|----------|------|----------|
-| `actions`| array | **Required** |
-| `attributes`|  | Optional |
-| `name`| string | **Required** |
-
-
-
-#### actions
-##### The Command Actions List
-
-List of the actions of given command. Now the only one command must be specified in list but there are plans to implement supporting multiple actions commands.
-
-`actions`
-* is **required**
-* type: `object[]`
-* between `1` and `1` items in the array
-
-
-##### actions Type
-
-
-Array type: `object[]`
-
-All items must be of the type:
-`object` with following properties:
-
-
-| Property | Type | Required |
-|----------|------|----------|
-| `command`| string | **Required** |
-| `tool`| string | **Required** |
-| `type`| string | **Required** |
-| `workdir`| string | Optional |
-
-
-
-#### command
-
-The actual action command-line string
-
-`command`
-* is **required**
-* type: `string`
-
-##### command Type
-
-
-`string`
-
-
-
-
-
-##### command Example
-
-```json
-mvn package
+```
+...
+tools:
+  - name: theia-editor
+    type: cheEditor
+    id: org.eclipse.che.editor.theia:1.0.0
 ```
 
+#### chePlugin
+Describes the plugin which used in workspace by defining it's id. 
+It is allowed to have several `chePlugin` tools.
 
-
-
-#### tool
-
-Describes tool to which given action relates
-
-`tool`
-* is **required**
-* type: `string`
-
-##### tool Type
-
-
-`string`
-
-
-
-
-
-##### tool Example
-
-```json
-mvn-stack
+```
+...
+  tools:
+   - name: exec-plugin
+     type: chePlugin
+     id: che-machine-exec-plugin:0.0.1
 ```
 
+Both types above using composite id, which is colon-separated id and version of plugin from Che Plugin registry.  
+List of available Che plugins and more information about registry can be found on https://github.com/eclipse/che-plugin-registry 
 
 
 
-#### type
+#### kubernetes/openshift
+More complex tool type, which allows to apply configuration from kubernetes/openshift lists. Content of the tool may be provided either via `local` attribute which points to the file with tool content.
+Currently, devfile can only contain one tool with `kubernetes` or `openshift` type.
+```
+...
+  tools:
+    - name: mysql
+      type: kubernetes
+      local: petclinic.yaml
+      selector:
+        app.kubernetes.io/name: mysql
+        app.kubernetes.io/component: database
+        app.kubernetes.io/part-of: petclinic
+```
+Contents of the `local` file is currently read _ONLY_ if the devfile and local file both placed in the same public GitHub repository. 
+So, alternatively, if you need to post devfile with such tools to REST API, contents of K8S/Openshift list can be embedded into devfile using `localContent` field:
 
-Describes action type
-
-`type`
-* is **required**
-* type: `string`
-
-##### type Type
-
-
-`string`
-
-
-
-
-
-##### type Example
-
-```json
-exec
+```
+...
+  tools:
+    - name: mysql
+      type: kubernetes
+      local: petclinic.yaml
+       localContent: |
+           kind: List
+           items:
+            -
+             apiVersion: v1
+             kind: Pod
+             metadata:
+              name: ws
+             spec:
+              containers:
+              ... etc
 ```
 
 
+#### dockerimage
+Tool type which allows to define docker image based configuration of container in workspace.
+Devfile can only contain one tool with `dockerimage` type. 
 
-
-#### workdir
-
-Working directory where the command should be executed
-
-`workdir`
-* is optional
-* type: `string`
-
-##### workdir Type
-
-
-`string`
-
-
-
-
-
-##### workdir Example
-
-```json
-/projects/spring-petclinic
+```
+ ...
+ tools:
+   - name: maven
+     type: dockerimage
+     image: eclipe/maven-jdk8:latest
+     volumes:
+       - name: maven-repo
+         containerPath: /root/.m2
+     env:
+       - name: ENV_VAR
+         value: value
+     endpoints:
+       - name: maven-server
+         port: 3101
+         attributes:
+           protocol: http
+           secure: 'true'
+           public: 'true'
+           discoverable: 'false'
+     memoryLimit: 1536M
 ```
 
+### Commands expanded
+Devfile allows to specify commands set to be available for execution in workspace. Each command may contain subset of actions, which are related to specific tool, in whose container it will be executed.
 
 
-
-
-
-
-
-
-
-
-#### attributes
-
-Additional command attributes
-
-`attributes`
-* is optional
-* type: reference
-
-##### attributes Type
-
-
-* []() – `#/definitions/attributes`
-
-
-
-
-
-
-
-#### name
-
-Describes the name of the command. Should be unique per commands set.
-
-`name`
-* is **required**
-* type: `string`
-
-##### name Type
-
-
-`string`
-
-
-
-
-
-##### name Example
-
-```json
-build
+```
+ ...
+ commands:
+   - name: build
+     actions:
+       - type: exec
+         tool: mysql
+         command: mvn clean
+         workdir: /projects/spring-petclinic
 ```
 
+### Live working examples
 
+    //TODO
 
-
-
-
-
-
-
-## name
-### Devfile Name
-
-The name of the devfile. Workspaces created from devfile, will inherit this name
-
-`name`
-* is **required**
-* type: `string`
-* defined in this schema
-
-### name Type
-
-
-`string`
-
-
-
-
-
-### name Example
-
-```json
-"petclinic-dev-environment"
-```
-
-
-## projects
-### The Projects List
-
-Description of the projects, containing names and sources locations
-
-`projects`
-* is optional
-* type: `object[]`
-
-* defined in this schema
-
-### projects Type
-
-
-Array type: `object[]`
-
-All items must be of the type:
-`object` with following properties:
-
-
-| Property | Type | Required |
-|----------|------|----------|
-| `name`| string | **Required** |
-| `source`| object | **Required** |
-
-
-
-#### name
-##### The Project Name
-
-undefined
-
-`name`
-* is **required**
-* type: `string`
-
-##### name Type
-
-
-`string`
-
-
-
-
-
-##### name Example
-
-```json
-petclinic
-```
-
-
-
-
-#### source
-##### The Project Source object
-
-Describes the project's source - type and location
-
-`source`
-* is **required**
-* type: `object`
-
-##### source Type
-
-Unknown type `object`.
-
-```json
-{
-  "type": "object",
-  "title": "The Project Source object",
-  "description": "Describes the project's source - type and location",
-  "required": [
-    "type",
-    "location"
-  ],
-  "properties": {
-    "type": {
-      "type": "string",
-      "description": "Project's source type.",
-      "examples": [
-        "git",
-        "github",
-        "zip"
-      ]
-    },
-    "location": {
-      "type": "string",
-      "description": "Project's source location address. Should be URL for git and github located projects, or file:// for zip.",
-      "examples": [
-        "git@github.com:spring-projects/spring-petclinic.git"
-      ]
-    }
-  },
-  "simpletype": "`object`"
-}
-```
-
-
-
-
-
-
-
-
-
-
-
-
-## specVersion
-### Devfile Specification Version
-
-`specVersion`
-* is **required**
-* type: `string`
-* defined in this schema
-
-### specVersion Type
-
-
-`string`
-
-
-
-
-
-### specVersion Example
-
-```json
-"0.0.1"
-```
-
-
-## tools
-### The Tools List
-
-Description of the workspace tools, such as editor and plugins
-
-`tools`
-* is **required**
-* type: `object[]`
-
-* defined in this schema
-
-### tools Type
-
-
-Array type: `object[]`
-
-All items must be of the type:
-`object` with following properties:
-
-
-| Property | Type | Required | Default |
-|----------|------|----------|---------|
-| `endpoints`| array | Optional |  |
-| `env`| array | Optional |  |
-| `id`| string | Optional |  |
-| `image`| string | Optional |  |
-| `local`| string | Optional |  |
-| `localContent`| string | Optional |  |
-| `memoryLimit`| string | Optional |  |
-| `mountSources`| boolean | Optional | `"false"` |
-| `name`| string | **Required** |  |
-| `selector`|  | Optional |  |
-| `type`| string | **Required** |  |
-| `volumes`| array | Optional |  |
-
-
-
-#### endpoints
-
-Describes dockerimage tool endpoints
-
-`endpoints`
-* is optional
-* type: `array`
-
-
-##### endpoints Type
-
-
-Array type: `array`
-
-All items must be of the type:
-Unknown type ``.
-
-```json
-{
-  "type": "array",
-  "description": "Describes dockerimage tool endpoints",
-  "items": {
-    "name": "object",
-    "description": "Describes dockerimage tool endpoint",
-    "required": [
-      "name",
-      "port"
-    ],
-    "properties": {
-      "name": {
-        "type": "string",
-        "title": "The Environment Variable Name",
-        "description": "The environment variable name"
-      },
-      "port": {
-        "type": "integer",
-        "title": "The Environment Variable Name",
-        "description": "The environment variable name"
-      },
-      "attributes": {
-        "type": "object",
-        "public": {
-          "type": "boolean",
-          "description": "Identifies endpoint as workspace internally or externally accessible.",
-          "default": "true"
-        },
-        "secure": {
-          "type": "boolean",
-          "description": "Identifies server as secure or non-secure. Requests to secure servers will be authenticated and must contain machine token",
-          "default": "false"
-        },
-        "discoverable": {
-          "type": "boolean",
-          "description": "Identifies endpoint as accessible by its name.",
-          "default": "false"
-        },
-        "protocol": {
-          "type": "boolean",
-          "description": "Defines protocol that should be used for communication with endpoint. Is used for endpoint URL evaluation"
-        },
-        "additionalProperties": {
-          "type": "string"
-        },
-        "javaType": "java.util.Map<String, String>"
-      }
-    },
-    "simpletype": "complex"
-  },
-  "simpletype": "`array`"
-}
-```
-
-
-  
-Describes dockerimage tool endpoint
-
-
-
-
-
-
-
-
-
-#### env
-
-The environment variables list that should be set to docker container
-
-`env`
-* is optional
-* type: `object[]`
-
-
-##### env Type
-
-
-Array type: `object[]`
-
-All items must be of the type:
-`object` with following properties:
-
-
-| Property | Type | Required |
-|----------|------|----------|
-| `name`| string | **Required** |
-| `value`| string | **Required** |
-
-
-
-#### name
-##### The Environment Variable Name
-
-The environment variable name
-
-`name`
-* is **required**
-* type: `string`
-
-##### name Type
-
-
-`string`
-
-
-
-
-
-
-
-
-#### value
-##### The Environment Variable Value
-
-The environment variable value
-
-`value`
-* is **required**
-* type: `string`
-
-##### value Type
-
-
-`string`
-
-
-
-
-
-
-
-
-  
-Describes environment variable
-
-
-
-
-
-
-
-
-
-#### id
-
-Describes the tool FQN
-
-`id`
-* is optional
-* type: `string`
-
-##### id Type
-
-
-`string`
-
-
-
-
-
-##### id Example
-
-```json
-eclipse/maven-jdk8:1.0.0
-```
-
-
-
-
-#### image
-
-Specifies the docker image that should be used for tool
-
-`image`
-* is optional
-* type: `string`
-
-##### image Type
-
-
-`string`
-
-
-
-
-
-##### image Example
-
-```json
-eclipse/maven-jdk8:1.0.0
-```
-
-
-
-
-#### local
-
-Describes location of Kubernetes list yaml file. Applicable only for 'kubernetes' and 'openshift' type tools
-
-`local`
-* is optional
-* type: `string`
-
-##### local Type
-
-
-`string`
-
-
-
-
-
-##### local Example
-
-```json
-petclinic-app.yaml
-```
-
-
-
-
-#### localContent
-
-Inlined content of a file specified in field 'local'
-
-`localContent`
-* is optional
-* type: `string`
-
-##### localContent Type
-
-
-`string`
-
-
-
-
-
-##### localContent Example
-
-```json
-{"kind":"List","items":[{"apiVersion":"v1","kind":"Pod","metadata":{"name":"ws"},"spec":{"containers":[{"image":"eclipse/che-dev:nightly"}]}}]}
-```
-
-
-
-
-#### memoryLimit
-
-Describes memory limit for the tool. You can express memory as a plain integer or as a fixed-point integer using one of these suffixes: E, P, T, G, M, K. You can also use the power-of-two equivalents: Ei, Pi, Ti, Gi, Mi, Ki
-
-`memoryLimit`
-* is optional
-* type: `string`
-
-##### memoryLimit Type
-
-
-`string`
-
-
-
-
-
-##### memoryLimit Examples
-
-```json
-128974848
-```
-
-```json
-129e6
-```
-
-```json
-129M
-```
-
-```json
-123Mi
-```
-
-
-
-
-
-#### mountSources
-
-Describes whether projects sources should be mount to the tool. `CHE_PROJECTS_ROOT` environment variable should contains a path where projects sources are mount
-
-`mountSources`
-* is optional
-* type: `boolean`
-* default: `"false"`
-
-
-##### mountSources Type
-
-
-`boolean`
-
-
-
-
-
-
-
-#### name
-
-Describes the name of the tool. Should be unique per tool set.
-
-`name`
-* is **required**
-* type: `string`
-
-##### name Type
-
-
-`string`
-
-
-
-
-
-##### name Example
-
-```json
-mvn-stack
-```
-
-
-
-
-#### selector
-
-Describes the objects selector for the recipe type tools. Allows to pick-up only selected items from k8s/openshift list
-
-`selector`
-* is optional
-* type: reference
-
-##### selector Type
-
-
-* []() – `#/definitions/selector`
-
-
-
-##### selector Example
-
-```json
-{
-   "app.kubernetes.io/name" : "mysql", 
-   "app.kubernetes.io/component" : "database", 
-   "app.kubernetes.io/part-of" : "petclinic" 
-}
-```
-
-
-
-
-#### type
-
-Describes type of the tool, e.g. whether it is an plugin or editor or other type
-
-`type`
-* is **required**
-* type: `string`
-
-##### type Type
-
-
-`string`
-
-
-
-
-
-##### type Examples
-
-```json
-chePlugin
-```
-
-```json
-cheEditor
-```
-
-```json
-kubernetes
-```
-
-```json
-openshift
-```
-
-```json
-dockerimage
-```
-
-
-
-
-
-#### volumes
-
-Describes volumes which should be mount to tool
-
-`volumes`
-* is optional
-* type: `object[]`
-
-
-##### volumes Type
-
-
-Array type: `object[]`
-
-All items must be of the type:
-`object` with following properties:
-
-
-| Property | Type | Required |
-|----------|------|----------|
-| `containerPath`| string | **Required** |
-| `name`| string | **Required** |
-
-
-
-#### containerPath
-##### The path where volume should be mount to container
-
-undefined
-
-`containerPath`
-* is **required**
-* type: `string`
-
-##### containerPath Type
-
-
-`string`
-
-
-
-
-
-##### containerPath Example
-
-```json
-/home/user/data
-```
-
-
-
-
-#### name
-##### The Volume Name
-
-The volume name. If several tools mount the same volume then they will reuse the volume and will be able to access to the same files
-
-`name`
-* is **required**
-* type: `string`
-
-##### name Type
-
-
-`string`
-
-
-
-
-
-##### name Example
-
-```json
-my-data
-```
-
-
-
-  
-Describe volume that should be mount to tool
-
-
-
-
-
-
-
-
-
-
-
-
-
+### Planned features
+There is still a lot of plans to extend Devfile possibilities, such as support multiple kubernetes/openshift tools etc
