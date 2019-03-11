@@ -57,10 +57,9 @@ commands:
     actions:
       - type: exec
         tool: theia-dev
-        command: cd /projects/che-theia-samples/hello-world-frontend-plugin && yarn
-        workdir: /projects/che-theia-samples/hello-world-frontend-plugin
+        command: cd /projects/che-theia-samples/samples/hello-world-frontend-plugin && yarn
   - name: run
     actions:
       - type: exec
         tool: theia-editor
-        command: export HOSTED_PLUGIN=/projects/che-theia-samples/hello-world-frontend-plugin && node ${HOME}/src-gen/backend/main.js /projects --hostname=0.0.0.0 --port=3130 && yarn start
+        command: export HOSTED_PLUGIN=/projects/che-theia-samples/samples/hello-world-frontend-plugin && node ${HOME}/src-gen/backend/main.js /projects --hostname=0.0.0.0 --port=3130 && yarn start
