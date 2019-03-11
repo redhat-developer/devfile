@@ -9,10 +9,10 @@ https://<your-che-host>/f?url=https://raw.githubusercontent.com/redhat-developer
   
 - With cURL (Requires clone the repo) : 
 ```
-curl -X POST  -H "Authorization: <TOKEN>" -H "Content-Type: application/yaml" -d "data=@path/to/devfile.yaml"  https://<your-che-host>/api/devfile
+curl -X POST  -H "Authorization: <TOKEN>" -H "Content-Type: application/yaml" -d "data=@path/to/devfile.yml"  https://<your-che-host>/api/devfile
 ```
 
 - With [chectl](https://github.com/che-incubator/chectl/) (Requires clone the repo): 
 ```
-chectl workspace:start --devfile=path/to/devfile.yaml
+chectl workspace:start --devfile=path/to/devfile.yml
 ```
