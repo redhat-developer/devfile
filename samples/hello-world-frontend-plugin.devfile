@@ -1,5 +1,5 @@
 specVersion: 0.0.1
-name: hello-world
+name: theia-hello-world-plugin
 projects:
   - name: che-theia-samples
     source:
