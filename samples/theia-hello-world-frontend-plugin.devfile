@@ -1,0 +1,29 @@
+specVersion: 0.0.1
+name: theia-hello-world-plugin
+projects:
+  - name: che-theia-samples
+    source:
+      type: git
+      location: 'https://github.com/eclipse/che-theia-samples.git'
+tools:
+  - name: theia-editor
+    type: cheEditor
+    id: org.eclipse.che.editor.theia:1.0.0
+  - name: exec-plugin
+    type: chePlugin
+    id: che-machine-exec-plugin:0.0.1
+  - name: theia-dev
+    type: kubernetes
+    local: theia-dev.yaml
+commands:
+  - name: build
+    actions:
+      - type: exec
+        tool: theia-dev
+        command: cd /projects/che-theia-samples/hello-world-frontend-plugin && yarn
+        workdir: /projects/che-theia-samples/hello-world-frontend-plugin
+  - name: run
+    actions:
+      - type: exec
+        tool: theia-editor
+        command: export HOSTED_PLUGIN=/projects/che-theia-samples/hello-world-frontend-plugin && node ${HOME}/src-gen/backend/main.js /projects --hostname=0.0.0.0 --port=3130 && yarn start
