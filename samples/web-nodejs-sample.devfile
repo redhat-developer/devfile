@@ -23,4 +23,4 @@ commands:
     actions:
       - type: exec
         tool: theia-editor
-        command: curl ${HOSTNAME}:3000
+        command: curl localhost:3000
