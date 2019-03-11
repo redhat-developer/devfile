@@ -36,11 +36,11 @@ tools:
              - 
               mountPath: /projects
               name: projects
-            volumes:
-             - 
-              name: projects
-              persistentVolumeClaim:
-                claimName: projects
+          volumes:
+           - 
+            name: projects
+            persistentVolumeClaim:
+              claimName: projects
        - 
         apiVersion: v1
         kind: PersistentVolumeClaim
