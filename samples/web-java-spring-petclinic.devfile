@@ -41,4 +41,3 @@ commands:
         tool: dev
         command: "$TOMCAT_HOME/bin/catalina.sh stop 2>&1"
         workdir: /projects/spring-petclinic
-

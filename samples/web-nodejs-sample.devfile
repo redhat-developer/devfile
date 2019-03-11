@@ -24,4 +24,3 @@ commands:
       - type: exec
         tool: theia-editor
         command: curl ${HOSTNAME}:3000
-        workdir: /projects/nodejs-sample/
