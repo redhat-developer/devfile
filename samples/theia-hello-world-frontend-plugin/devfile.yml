@@ -15,43 +15,6 @@ tools:
   - name: theia-dev
     type: kubernetes
     local: dev.yaml
-    localContent: |
-      apiVersion: v1
-      kind: List
-      items:
-       - 
-        apiVersion: v1
-        kind: Pod
-        metadata:
-          name: ws
-        spec:
-          containers:
-           - 
-            name: theia-dev
-            image: eclipse/che-theia-dev:nightly
-            resources:
-              limits:
-                memory: 2048Mi
-            volumeMounts:
-             - 
-              mountPath: /projects
-              name: projects
-          volumes:
-           - 
-            name: projects
-            persistentVolumeClaim:
-              claimName: projects
-       - 
-        apiVersion: v1
-        kind: PersistentVolumeClaim
-        metadata:
-          name: projects
-        spec:
-          accessModes:
-           - ReadWriteOnce
-          resources:
-            requests:
-              storage: 2Gi
 commands:
   - name: build
     actions:
