@@ -30,7 +30,7 @@ commands:
     actions:
       - type: exec
         tool: dev
-        command: "cd /projects/spring-petclinic && mvn clean install && cp /projects/spring-petclinic/target/*.war $TOMCAT_HOME/webapps/ROOT.war && $TOMCAT_HOME/bin/catalina.sh run 2>&1"
+        command: "cd $CHE_PROJECTS_ROOT/spring-petclinic && mvn clean install && cp $CHE_PROJECTS_ROOT/spring-petclinic/target/*.war $TOMCAT_HOME/webapps/ROOT.war && $TOMCAT_HOME/bin/catalina.sh run 2>&1"
   - name: stop
     actions:
       - type: exec

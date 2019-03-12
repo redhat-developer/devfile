@@ -17,8 +17,7 @@ commands:
     actions:
       - type: exec
         tool: theia-editor
-        command: cd /projects/nodejs-sample/app && node app.js
-        workdir: /projects/nodejs-sample/app
+        command: cd ${CHE_PROJECTS_ROOT}/nodejs-sample/app && node app.js
   - name: test
     actions:
       - type: exec
