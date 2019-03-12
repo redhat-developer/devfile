@@ -7,14 +7,14 @@ items:
     name: ws
   spec:
     containers:
-    -  name: theia-dev
-       image: eclipse/che-theia-dev:nightly
-       resources:
-         limits:
-           memory: 2048Mi
-       volumeMounts:
-       -  mountPath: /projects
-          name: projects
+    - name: theia-dev
+      image: eclipse/che-theia-dev:nightly
+      resources:
+        limits:
+          memory: 2048Mi
+      volumeMounts:
+      - mountPath: /projects
+        name: projects
     volumes:
     - name: projects
       persistentVolumeClaim:
