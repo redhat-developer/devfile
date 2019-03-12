@@ -1,0 +1,25 @@
+specVersion: 0.0.1
+name: nodejs-sample
+projects:
+  - name: nodejs-sample
+    source:
+      type: git
+      location: 'https://github.com/che-samples/web-nodejs-sample.git'
+tools:
+  - name: theia-editor
+    type: cheEditor
+    id: org.eclipse.che.editor.theia:1.0.0
+  - name: exec-plugin
+    type: chePlugin
+    id: che-machine-exec-plugin:0.0.1
+commands:
+  - name: start
+    actions:
+      - type: exec
+        tool: theia-editor
+        command: cd ${CHE_PROJECTS_ROOT}/nodejs-sample/app && node app.js
+  - name: test
+    actions:
+      - type: exec
+        tool: theia-editor
+        command: curl localhost:3000
