@@ -15,9 +15,6 @@ tools:
   - name: dev
     type: dockerimage
     image: registry.devshift.net/che/centos_jdk8
-    env:
-      - name: CHE_MACHINE_NAME
-        value: ws-machine
     mountSources: true
     endpoints:
       - name: petclinic-web-server
@@ -34,10 +31,8 @@ commands:
       - type: exec
         tool: dev
         command: "cd /projects/spring-petclinic && mvn clean install && cp /projects/spring-petclinic/target/*.war $TOMCAT_HOME/webapps/ROOT.war && $TOMCAT_HOME/bin/catalina.sh run 2>&1"
-        workdir: /projects/spring-petclinic
   - name: stop
     actions:
       - type: exec
         tool: dev
         command: "$TOMCAT_HOME/bin/catalina.sh stop 2>&1"
-        workdir: /projects/spring-petclinic
