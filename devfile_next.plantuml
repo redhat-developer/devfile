@@ -54,6 +54,7 @@ Project o-- "1" ProjectSource
 class ProjectSource {
   - type
   - location
+  - branch
 }
 
 Project -[hidden]> Component
