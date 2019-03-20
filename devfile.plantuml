@@ -1,6 +1,6 @@
 @startuml devfile
 
-class DevelopmentEnvironment {
+class Devfile {
   - version
   - name
   - commands
@@ -9,71 +9,39 @@ class DevelopmentEnvironment {
 }
 
 together {
-  class DevelopmentTool
+  class Tool
   class Command
   class Project
 }
 
-together {
-  class ToolAction
-  class CloudAppDefinition
-}
+Devfile *-- "n" Tool
+Devfile *-- "n" Command
+Devfile *-- "n" Project
 
-DevelopmentEnvironment *-- "n" DevelopmentTool
-DevelopmentEnvironment *-- "n" Command
-DevelopmentEnvironment *-- "n" Project
-
-class DevelopmentTool {
+class Tool {
     - name
-    - version
-    - attributes
-    - definition
-    - mountProjectsSources
+    - type
 }
 
-DevelopmentTool o-- CloudAppDefinition
 
-CloudAppDefinition <|-.. DockerImage
-CloudAppDefinition <|-.. Dockerfile
-CloudAppDefinition <|-.. ComposeFile
-CloudAppDefinition <|-.. OpenShiftResources
-CloudAppDefinition <|-.. KubernetesResources
-CloudAppDefinition <|-.. HelmChart
-CloudAppDefinition <|-.. ChePlugin
-CloudAppDefinition <|-.. CheEditor
+Tool <|-.. Dockerimage
+Tool <|-.. Openshift
+Tool <|-.. Kubernetes
+Tool <|-.. ChePlugin
+Tool <|-.. CheEditor
 
 class Command {
   - name
+  - actions
+}
+
+Command *-- "n" CommandAction
+CommandAction o-- Tool
+
+class CommandAction {
   - type
-  - attributes
   - tool
-  - timeout
-}
-
-Command *-- "n" ToolAction
-ToolAction o-- DevelopmentTool
-
-class ToolAction {
-  - tool
-  - action
-}
-
-ToolAction o-- "1" ActionType
-
-ActionType <|-..ContainerExec
-ActionType <|-..ContainerStart
-ActionType <|-..ContainerStop
-
-together {
-  class ContainerExec
-  class ContainerStart
-  class ContainerStop
-}
-
-class ContainerExec {
   - command
-  - args
-  - workdir
 }
 
 class Project {
@@ -88,48 +56,35 @@ class ProjectSource {
   - location
 }
 
-class DockerImage {
-  - image
-  - env
-  - entryPoint
-  - persistentVolumes
+class Dockerimage {
+   - image
+   - memoryLimit
+   - mountSources
+   - volumes
+   - env
+   - endpoints
+   - command
+   - args
 }
 
-DockerImage *-- "n" PersistentVolume
-
-class PersistentVolume {
-  - name
-  - containerPath
-}
-
-class ComposeFile {
+class Openshift {
   - local
+  - localContent
+  - selector
 }
 
-class Dockerfile {
+class Kubernetes {
   - local
-}
-
-class OpenShiftResources {
-  - local
-}
-
-class KubernetesResources {
-  - local
-}
-
-class HelmChart {
-  - local
+  - localContent
+  - selector
 }
 
 class ChePlugin {
   - id
-  - registry
 }
 
 class CheEditor {
   - id
-  - registry
 }
 
 @enduml
