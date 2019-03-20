@@ -1,0 +1,26 @@
+specVersion: 0.0.1
+name: multiple-k8s-tools
+projects:
+  - name: nodejs-mongo-app
+    source:
+      type: git
+      location: 'https://github.com/ijason/NodeJS-Sample-App.git'
+tools:
+  - name: theia-editor
+    type: cheEditor
+    id: org.eclipse.che.editor.theia:1.0.0
+  - name: exec-plugin
+    type: chePlugin
+    id: che-machine-exec-plugin:0.0.1
+  - name: mongodb
+    type: kubernetes
+    local: mongo-db.yaml
+  - name: nodejs-app
+    type: openshift
+    local: nodejs.yaml
+commands:
+  - name: run
+    actions:
+      - type: exec
+        tool: nodejs-app
+        command: cd ${CHE_PROJECTS_ROOT}/nodejs-mongo-app/EmployeeDB/ && npm install && sed -i -- ''s/localhost/mongo/g'' app.js && node app.js
