@@ -85,7 +85,7 @@ class Kubernetes {
   - entrypoints
 }
 
-class ChePlugin #blue {
+class ChePlugin #yellow {
   - id
 }
 note bottom of ChePlugin: Che specific
