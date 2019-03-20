@@ -1,0 +1,79 @@
+---
+kind: Template
+apiVersion: v1
+metadata:
+  name: nodejs-app
+objects:
+-
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: web
+    labels:
+      app: nodejs
+  spec:
+    replicas: 1
+    selector:
+      name: web
+    template:
+      metadata:
+        labels:
+          app: nodejs
+        name: web-controller
+      spec:
+        containers:
+        - image: "${NODEJS_IMAGE}"
+          command: ['tail', '-f', '/dev/null']
+          args: []
+          name: web
+          ports:
+          - containerPort: 3000
+            name: http-server
+          volumeMounts:
+           - mountPath: /projects
+             name: projects
+        volumes:
+         - name: projects
+           persistentVolumeClaim:
+             claimName: projects
+-
+  apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: projects
+  spec:
+    accessModes:
+     - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+-
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: web
+    labels:
+      name: web
+  spec:
+    type: LoadBalancer
+    ports:
+      - name: web
+        port: 80
+        targetPort: 3000
+        protocol: TCP
+    selector:
+      app: nodejs
+-
+  apiVersion: v1
+  kind: Route
+  metadata:
+    name: che
+  spec:
+    to:
+      kind: Service
+      name: web
+    port:
+      targetPort: web
+parameters:
+- name: NODEJS_IMAGE
+  value: "node:0.10.40"
