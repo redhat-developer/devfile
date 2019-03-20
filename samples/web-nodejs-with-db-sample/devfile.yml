@@ -1,5 +1,5 @@
 specVersion: 0.0.1
-name: multiple-k8s-tools
+name: nodejs-with-db
 projects:
   - name: nodejs-mongo-app
     source:
@@ -14,10 +14,10 @@ tools:
     id: che-machine-exec-plugin:0.0.1
   - name: mongodb
     type: kubernetes
-    local: mongo-db.yaml
+    local: mongo-db.yml
   - name: nodejs-app
     type: openshift
-    local: nodejs.yaml
+    local: nodejs.yml
 commands:
   - name: run
     actions:
