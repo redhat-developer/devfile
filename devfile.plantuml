@@ -1,7 +1,7 @@
 @startuml devfile
 
 class Devfile {
-  - version
+  - specVersion
   - name
   - commands
   - tools
@@ -56,6 +56,10 @@ class ProjectSource {
   - location
 }
 
+Project -[hidden]> Tool
+Tool -[hidden]> Command
+ProjectSource -[hidden]> CommandAction
+
 class Dockerimage {
    - image
    - memoryLimit
@@ -81,12 +85,17 @@ class Kubernetes {
   - entrypoints
 }
 
-class ChePlugin {
+class ChePlugin #yellow {
   - id
 }
+note bottom of ChePlugin: Che specific
 
-class CheEditor {
+class CheEditor #yellow {
   - id
 }
+note bottom of CheEditor: Che specific
+
+ChePlugin -[hidden]> CheEditor
+CheEditor -[hidden]> Dockerimage
 
 @enduml
