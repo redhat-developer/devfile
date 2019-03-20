@@ -71,12 +71,14 @@ class Openshift {
   - local
   - localContent
   - selector
+  - entrypoints
 }
 
 class Kubernetes {
   - local
   - localContent
   - selector
+  - entrypoints
 }
 
 class ChePlugin {
