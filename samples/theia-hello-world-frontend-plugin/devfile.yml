@@ -14,7 +14,7 @@ tools:
     id: che-machine-exec-plugin:0.0.1
   - name: theia-dev
     type: kubernetes
-    local: dev.yaml
+    local: dev.yml
 commands:
   - name: build
     actions:
