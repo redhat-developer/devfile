@@ -80,7 +80,7 @@ class Openshift {
 }
 
 class Kubernetes {
-  - local
+  - reference
   - localContent
   - selector
   - entrypoints
