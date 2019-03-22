@@ -1,34 +1,34 @@
-@startuml devfile
+@startuml devfile_next
 
 class Devfile {
   - specVersion
   - name
   - commands
-  - tools
+  - components
   - projects
 }
 
 together {
-  class Tool
+  class Component
   class Command
   class Project
 }
 
-Devfile *-- "n" Tool
+Devfile *-- "n" Component
 Devfile *-- "n" Command
 Devfile *-- "n" Project
 
-class Tool {
+class Component {
     - name
     - type
 }
 
 
-Tool <|-.. Dockerimage
-Tool <|-.. Openshift
-Tool <|-.. Kubernetes
-Tool <|-.. ChePlugin
-Tool <|-.. CheEditor
+Component <|-.. Dockerimage
+Component <|-.. Openshift
+Component <|-.. Kubernetes
+Component <|-.. ChePlugin
+Component <|-.. CheEditor
 
 class Command {
   - name
@@ -36,11 +36,11 @@ class Command {
 }
 
 Command *-- "n" CommandAction
-CommandAction o-- Tool
+CommandAction o-- Component
 
 class CommandAction {
   - type
-  - tool
+  - component
   - command
 }
 
@@ -54,10 +54,11 @@ Project o-- "1" ProjectSource
 class ProjectSource {
   - type
   - location
+  - branch
 }
 
-Project -[hidden]> Tool
-Tool -[hidden]> Command
+Project -[hidden]> Component
+Component -[hidden]> Command
 ProjectSource -[hidden]> CommandAction
 
 class Dockerimage {
@@ -72,14 +73,14 @@ class Dockerimage {
 }
 
 class Openshift {
-  - local
+  - reference
   - localContent
   - selector
   - entrypoints
 }
 
 class Kubernetes {
-  - local
+  - reference
   - localContent
   - selector
   - entrypoints

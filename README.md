@@ -1,20 +1,17 @@
 # devfile
 
-## First Generation: chefile
+This repository contains the specs, docs and examples of the devfile.
 
-![chefile](chefile.png)
-[Diagram source (plantuml)](chefile.plantuml)
+See explained devfile documentation with examples at https://redhat-developer.github.io/devfile/
 
-## Second Generation: chefile.next
-
-Chefile updated with workspace.next model
-
-![chefile.next](chefile.next.png)
-[Diagram source (plantuml)](chefile.next.plantuml)
-
-## Third Generation: devfile
-
-Chefile.next made non che specific
+## First Generation:
 
 ![devfile](devfile.png)
+
 [Diagram source (plantuml)](devfile.plantuml)
+
+## Next Generation:
+
+![devfile](devfile_next.png)
+
+[Diagram source (plantuml)](devfile_next.plantuml)
