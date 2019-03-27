@@ -19,7 +19,7 @@ commands:
   - name: build
     actions:
       - type: exec
-        comopnent: theia-dev
+        component: theia-dev
         command: cd ${CHE_PROJECTS_ROOT}/che-theia-samples/samples/hello-world-frontend-plugin && yarn
   - name: run
     actions:
