@@ -5,7 +5,7 @@ projects:
     source:
       type: git
       location: 'https://github.com/che-samples/web-java-spring-petclinic.git'
-tools:
+components:
   - name: theia-ide
     type: cheEditor
     id: 'org.eclipse.che.editor.theia:1.0.0'
@@ -29,10 +29,10 @@ commands:
   - name: build_&_run
     actions:
       - type: exec
-        tool: dev
+        component: dev
         command: "cd $CHE_PROJECTS_ROOT/spring-petclinic && mvn clean install && cp $CHE_PROJECTS_ROOT/spring-petclinic/target/*.war $TOMCAT_HOME/webapps/ROOT.war && $TOMCAT_HOME/bin/catalina.sh run 2>&1"
   - name: stop
     actions:
       - type: exec
-        tool: dev
+        component: dev
         command: "$TOMCAT_HOME/bin/catalina.sh stop 2>&1"
