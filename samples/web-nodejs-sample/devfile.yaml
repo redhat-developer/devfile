@@ -5,7 +5,7 @@ projects:
     source:
       type: git
       location: 'https://github.com/che-samples/web-nodejs-sample.git'
-tools:
+components:
   - name: theia-editor
     type: cheEditor
     id: org.eclipse.che.editor.theia:1.0.0
@@ -16,10 +16,10 @@ commands:
   - name: start
     actions:
       - type: exec
-        tool: theia-editor
+        component: theia-editor
         command: cd ${CHE_PROJECTS_ROOT}/nodejs-sample/app && node app.js
   - name: test
     actions:
       - type: exec
-        tool: theia-editor
+        component: theia-editor
         command: curl localhost:3000
