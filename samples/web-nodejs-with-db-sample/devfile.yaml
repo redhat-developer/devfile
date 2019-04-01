@@ -14,10 +14,10 @@ components:
     id: che-machine-exec-plugin:0.0.1
   - name: mongodb
     type: kubernetes
-    local: mongo-db.yaml
+    reference: mongo-db.yaml
   - name: nodejs-app
     type: openshift
-    local: nodejs.yaml
+    reference: nodejs.yaml
 commands:
   - name: run
     actions:
