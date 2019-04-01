@@ -74,14 +74,14 @@ class Dockerimage {
 
 class Openshift {
   - reference
-  - localContent
+  - referenceContent
   - selector
   - entrypoints
 }
 
 class Kubernetes {
   - reference
-  - localContent
+  - referenceContent
   - selector
   - entrypoints
 }
