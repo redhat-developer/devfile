@@ -30,8 +30,7 @@
     },
     "required": [
         "specVersion",
-        "name",
-        "tools"
+        "name"
     ],
     "additionalProperties": false,
     "properties": {
@@ -92,16 +91,51 @@
                                 "examples": [
                                     "git@github.com:spring-projects/spring-petclinic.git"
                                 ]
+                            },
+                            "branch": {
+                                "type": "string",
+                                "description": "The name of the of the branch to check out after obtaining the source from the location. The branch has to already exist in the source otherwise the default branch is used. In case of git, this is also the name of the remote branch to push to.",
+                                "examples": [
+                                    "master",
+                                    "feature-42"
+                                ]
+                            },
+                            "startPoint": {
+                                "type": "string",
+                                "description": "The tag or commit id to reset the checked out branch to.",
+                                "examples": [
+                                    "release/4.2",
+                                    "349d3ad",
+                                    "v4.2.0"
+                                ]
+                            },
+                            "tag": {
+                                "type": "string",
+                                "description": "The name of the tag to reset the checked out branch to. Note that this is equivalent to 'startPoint' and provided for convenience.",
+                                "examples": [
+                                    "v4.2.0"
+                                ]
+                            },
+                            "commitId": {
+                                "type": "string",
+                                "description": "The id of the commit to reset the checked out branch to. Note that this is equivalent to 'startPoint' and provided for convenience.",
+                                "examples": [
+                                    "349d3ad"
+                                ]
                             }
                         }
+                    },
+                    "clonePath": {
+                        "type": "string",
+                        "description": "The path relative to the root of the projects to which this project should be cloned into. This is a unix-style relative path (i.e. uses forward slashes). The path is invalid if it is absolute or tries to escape the project root through the usage of '..'. If not specified, defaults to the project name."
                     }
                 }
             }
         },
-        "tools": {
+        "components": {
             "type": "array",
-            "title": "The Tools List",
-            "description": "Description of the workspace tools, such as editor and plugins",
+            "title": "The Components List",
+            "description": "Description of the workspace components, such as editor and plugins",
             "items": {
                 "type": "object",
                 "required": [
@@ -109,8 +143,8 @@
                     "type"
                 ],
                 "dependencies": {
-                    "localContent": [
-                        "local"
+                    "referenceContent": [
+                        "reference"
                     ]
                 },
                 "additionalProperties": false,
@@ -140,12 +174,13 @@
                                 ]
                             },
                             "name": {},
-                            "local": {},
-                            "localContent": {},
-                            "selector": {}
+                            "reference": {},
+                            "referenceContent": {},
+                            "selector": {},
+                            "entrypoints": {}
                         },
                         "required": [
-                            "local"
+                            "reference"
                         ],
                         "additionalProperties": false
                     },
@@ -175,14 +210,14 @@
                 ],
                 "properties": {
                     "name": {
-                        "description": "Describes the name of the tool. Should be unique per tool set.",
+                        "description": "Describes the name of the component. Should be unique per components set.",
                         "type": "string",
                         "examples": [
                             "mvn-stack"
                         ]
                     },
                     "type": {
-                        "description": "Describes type of the tool, e.g. whether it is an plugin or editor or other type",
+                        "description": "Describes type of the component, e.g. whether it is an plugin or editor or other type",
                         "type": "string",
                         "examples": [
                             "chePlugin",
@@ -194,20 +229,22 @@
                     },
                     "id": {
                         "type": "string",
-                        "description": "Describes the tool FQN",
+                        "description": "Describes the component id. It has the following format: [{REGISTRY_URL}/]{plugin/editor ID}:{plugin/editor VERSION}, where `{REGISTRY_URL}/` is an optional part.",
+                        "pattern": "^((https?://)[a-zA-Z0-9_\\-\\./]+)?[a-zA-Z0-9_\\-\\.]{1,}:[a-zA-Z0-9_\\-\\.]{1,}$",
                         "examples": [
-                            "eclipse/maven-jdk8:1.0.0"
+                            "org.eclipse.che.maven-jdk8:1.0.0",
+                            "https://che-plugin-registry.openshift.io/org.eclipse.che.maven-jdk8:1.0.0"
                         ]
                     },
-                    "local": {
-                        "description": "Describes location of Kubernetes list yaml file. Applicable only for 'kubernetes' and 'openshift' type tools",
+                    "reference": {
+                        "description": "Describes absolute or devfile-relative location of Kubernetes list yaml file. Applicable only for 'kubernetes' and 'openshift' type components",
                         "type": "string",
                         "examples": [
                             "petclinic-app.yaml"
                         ]
                     },
-                    "localContent": {
-                        "description": "Inlined content of a file specified in field 'local'",
+                    "referenceContent": {
+                        "description": "Inlined content of a file specified in field 'reference'",
                         "type": "string",
                         "examples": [
                             "{\"kind\":\"List\",\"items\":[{\"apiVersion\":\"v1\",\"kind\":\"Pod\",\"metadata\":{\"name\":\"ws\"},\"spec\":{\"containers\":[{\"image\":\"eclipse/che-dev:nightly\"}]}}]}"
@@ -215,21 +252,21 @@
                     },
                     "selector": {
                         "$ref": "#/definitions/selector",
-                        "description": "Describes the objects selector for the recipe type tools. Allows to pick-up only selected items from k8s/openshift list",
+                        "description": "Describes the objects selector for the recipe type components. Allows to pick-up only selected items from k8s/openshift list",
                         "examples": [
                             "{\n   \"app.kubernetes.io/name\" : \"mysql\", \n   \"app.kubernetes.io/component\" : \"database\", \n   \"app.kubernetes.io/part-of\" : \"petclinic\" \n}"
                         ]
                     },
                     "image": {
                         "type": "string",
-                        "description": "Specifies the docker image that should be used for tool",
+                        "description": "Specifies the docker image that should be used for component",
                         "examples": [
                             "eclipse/maven-jdk8:1.0.0"
                         ]
                     },
                     "memoryLimit": {
                         "type": "string",
-                        "description": "Describes memory limit for the tool. You can express memory as a plain integer or as a fixed-point integer using one of these suffixes: E, P, T, G, M, K. You can also use the power-of-two equivalents: Ei, Pi, Ti, Gi, Mi, Ki",
+                        "description": "Describes memory limit for the component. You can express memory as a plain integer or as a fixed-point integer using one of these suffixes: E, P, T, G, M, K. You can also use the power-of-two equivalents: Ei, Pi, Ti, Gi, Mi, Ki",
                         "examples": [
                             "128974848",
                             "129e6",
@@ -239,7 +276,7 @@
                     },
                     "mountSources": {
                         "type": "boolean",
-                        "description": "Describes whether projects sources should be mount to the tool. `CHE_PROJECTS_ROOT` environment variable should contains a path where projects sources are mount",
+                        "description": "Describes whether projects sources should be mount to the component. `CHE_PROJECTS_ROOT` environment variable should contains a path where projects sources are mount",
                         "default": "false"
                     },
                     "command": {
@@ -247,7 +284,8 @@
                         "items": {
                             "type": "string"
                         },
-                        "description": "The command to run in the dockerimage tool instead of the default one provided in the image.",
+                        "default": null,
+                        "description": "The command to run in the dockerimage component instead of the default one provided in the image. Defaults to null, meaning use whatever is defined in the image.",
                         "examples": [
                             "['/bin/sh', '-c']"
                         ]
@@ -257,17 +295,18 @@
                         "items": {
                             "type": "string"
                         },
-                        "description": "The arguments to supply to the command running the dockerimage tool. The arguments are supplied either to the default command provided in the image or to the overridden command.",
+                        "default": null,
+                        "description": "The arguments to supply to the command running the dockerimage component. The arguments are supplied either to the default command provided in the image or to the overridden command. Defaults to null, meaning use whatever is defined in the image.",
                         "examples": [
                             "['-R', '-f']"
                         ]
                     },
                     "volumes": {
                         "type": "array",
-                        "description": "Describes volumes which should be mount to tool",
+                        "description": "Describes volumes which should be mount to component",
                         "items": {
                             "type": "object",
-                            "description": "Describe volume that should be mount to tool",
+                            "description": "Describe volume that should be mount to component",
                             "required": [
                                 "name",
                                 "containerPath"
@@ -276,7 +315,7 @@
                                 "name": {
                                     "type": "string",
                                     "title": "The Volume Name",
-                                    "description": "The volume name. If several tools mount the same volume then they will reuse the volume and will be able to access to the same files",
+                                    "description": "The volume name. If several components mount the same volume then they will reuse the volume and will be able to access to the same files",
                                     "examples": [
                                         "my-data"
                                     ]
@@ -317,10 +356,10 @@
                     },
                     "endpoints": {
                         "type": "array",
-                        "description": "Describes dockerimage tool endpoints",
+                        "description": "Describes dockerimage component endpoints",
                         "items": {
                             "name": "object",
-                            "description": "Describes dockerimage tool endpoint",
+                            "description": "Describes dockerimage component endpoint",
                             "required": [
                                 "name",
                                 "port"
@@ -328,13 +367,13 @@
                             "properties": {
                                 "name": {
                                     "type": "string",
-                                    "title": "The Environment Variable Name",
-                                    "description": "The environment variable name"
+                                    "title": "The Endpoint Name",
+                                    "description": "The Endpoint name"
                                 },
                                 "port": {
                                     "type": "integer",
-                                    "title": "The Environment Variable Name",
-                                    "description": "The environment variable name"
+                                    "title": "The Endpoint Port",
+                                    "description": "The container port that should be used as endpoint"
                                 },
                                 "attributes": {
                                     "type": "object",
@@ -361,6 +400,48 @@
                                         "type": "string"
                                     },
                                     "javaType": "java.util.Map<String, String>"
+                                }
+                            }
+                        }
+                    },
+                    "entrypoints": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "parentName": {
+                                    "type": "string",
+                                    "description": "The name of the top level object in the referenced object list in which to search for containers. If not specified, the objects to search through can have any name."
+                                },
+                                "containerName": {
+                                    "type": "string",
+                                    "description": "The name of the container to apply the entrypoint to. If not specified, the entrypoint is modified on all matching containers."
+                                },
+                                "parentSelector": {
+                                    "$ref": "#/definitions/selector",
+                                    "description": "The selector on labels of the top level objects in the referenced list in which to search for containers. If not specified, the objects to search through can have any labels."
+                                },
+                                "command": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "default": null,
+                                    "description": "The command to run in the component instead of the default one provided in the image of the container. Defaults to null, meaning use whatever is defined in the image.",
+                                    "examples": [
+                                        "['/bin/sh', '-c']"
+                                    ]
+                                },
+                                "args": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "default": null,
+                                    "description": "The arguments to supply to the command running the component. The arguments are supplied either to the default command provided in the image of the container or to the overridden command. Defaults to null, meaning use whatever is defined in the image.",
+                                    "examples": [
+                                        "['-R', '-f']"
+                                    ]
                                 }
                             }
                         }
@@ -400,7 +481,7 @@
                             "type": "object",
                             "required": [
                                 "type",
-                                "tool",
+                                "component",
                                 "command"
                             ],
                             "properties": {
@@ -411,9 +492,9 @@
                                         "exec"
                                     ]
                                 },
-                                "tool": {
+                                "component": {
                                     "type": "string",
-                                    "description": "Describes tool to which given action relates",
+                                    "description": "Describes component to which given action relates",
                                     "examples": [
                                         "mvn-stack"
                                     ]
@@ -437,6 +518,18 @@
                     }
                 }
             }
+        },
+        "attributes": {
+            "type": "object",
+            "editorFree": {
+                "type": "boolean",
+                "description": "Defines that no editor is needed and default one should not be provisioned.",
+                "default": "false"
+            },
+            "additionalProperties": {
+                "type": "string"
+            },
+            "javaType": "java.util.Map<String, String>"
         }
     }
 }
