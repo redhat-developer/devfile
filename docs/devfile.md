@@ -12,13 +12,37 @@ This schema describes the structure of the devfile object
 
 # Devfile object Properties
 
-| Property | Type | Required | Defined by |
-|----------|------|----------|------------|
-| [commands](#commands) | `object[]` | Optional | Devfile object (this schema) |
-| [name](#name) | `string` | **Required** | Devfile object (this schema) |
-| [projects](#projects) | `object[]` | Optional | Devfile object (this schema) |
-| [specVersion](#specversion) | `string` | **Required** | Devfile object (this schema) |
-| [tools](#tools) | `object[]` | **Required** | Devfile object (this schema) |
+| Property | Type | Required | Nullable | Defined by |
+|----------|------|----------|----------|------------|
+| [attributes](#attributes) | `object` | Optional  | No | Devfile object (this schema) |
+| [commands](#commands) | `object[]` | Optional  | No | Devfile object (this schema) |
+| [components](#components) | `object[]` | Optional  | No | Devfile object (this schema) |
+| [name](#name) | `string` | **Required**  | No | Devfile object (this schema) |
+| [projects](#projects) | `object[]` | Optional  | No | Devfile object (this schema) |
+| [specVersion](#specversion) | `string` | **Required**  | No | Devfile object (this schema) |
+
+## attributes
+
+
+`attributes`
+
+* is optional
+* type: `object`
+* defined in this schema
+
+### attributes Type
+
+
+`object` with following properties:
+
+
+| Property | Type | Required |
+|----------|------|----------|
+
+
+
+
+
 
 ## commands
 ### The Commands List
@@ -26,9 +50,9 @@ This schema describes the structure of the devfile object
 Description of the predefined commands to be available in workspace
 
 `commands`
+
 * is optional
 * type: `object[]`
-
 * defined in this schema
 
 ### commands Type
@@ -54,9 +78,9 @@ All items must be of the type:
 List of the actions of given command. Now the only one command must be specified in list but there are plans to implement supporting multiple actions commands.
 
 `actions`
+
 * is **required**
-* type: `object[]`
-* between `1` and `1` items in the array
+* type: `object[]`* between `1` and `1` items in the array
 
 
 ##### actions Type
@@ -71,7 +95,7 @@ All items must be of the type:
 | Property | Type | Required |
 |----------|------|----------|
 | `command`| string | **Required** |
-| `tool`| string | **Required** |
+| `component`| string | **Required** |
 | `type`| string | **Required** |
 | `workdir`| string | Optional |
 
@@ -82,6 +106,7 @@ All items must be of the type:
 The actual action command-line string
 
 `command`
+
 * is **required**
 * type: `string`
 
@@ -89,6 +114,7 @@ The actual action command-line string
 
 
 `string`
+
 
 
 
@@ -103,15 +129,16 @@ mvn package
 
 
 
-#### tool
+#### component
 
-Describes tool to which given action relates
+Describes component to which given action relates
 
-`tool`
+`component`
+
 * is **required**
 * type: `string`
 
-##### tool Type
+##### component Type
 
 
 `string`
@@ -120,7 +147,8 @@ Describes tool to which given action relates
 
 
 
-##### tool Example
+
+##### component Example
 
 ```json
 mvn-stack
@@ -134,6 +162,7 @@ mvn-stack
 Describes action type
 
 `type`
+
 * is **required**
 * type: `string`
 
@@ -141,6 +170,7 @@ Describes action type
 
 
 `string`
+
 
 
 
@@ -160,6 +190,7 @@ exec
 Working directory where the command should be executed
 
 `workdir`
+
 * is optional
 * type: `string`
 
@@ -167,6 +198,7 @@ Working directory where the command should be executed
 
 
 `string`
+
 
 
 
@@ -193,6 +225,7 @@ Working directory where the command should be executed
 Additional command attributes
 
 `attributes`
+
 * is optional
 * type: reference
 
@@ -212,6 +245,7 @@ Additional command attributes
 Describes the name of the command. Should be unique per commands set.
 
 `name`
+
 * is **required**
 * type: `string`
 
@@ -219,6 +253,7 @@ Describes the name of the command. Should be unique per commands set.
 
 
 `string`
+
 
 
 
@@ -238,177 +273,18 @@ build
 
 
 
-## name
-### Devfile Name
+## components
+### The Components List
 
-The name of the devfile. Workspaces created from devfile, will inherit this name
+Description of the workspace components, such as editor and plugins
 
-`name`
-* is **required**
-* type: `string`
-* defined in this schema
+`components`
 
-### name Type
-
-
-`string`
-
-
-
-
-
-### name Example
-
-```json
-"petclinic-dev-environment"
-```
-
-
-## projects
-### The Projects List
-
-Description of the projects, containing names and sources locations
-
-`projects`
 * is optional
 * type: `object[]`
-
 * defined in this schema
 
-### projects Type
-
-
-Array type: `object[]`
-
-All items must be of the type:
-`object` with following properties:
-
-
-| Property | Type | Required |
-|----------|------|----------|
-| `name`| string | **Required** |
-| `source`| object | **Required** |
-
-
-
-#### name
-##### The Project Name
-
-undefined
-
-`name`
-* is **required**
-* type: `string`
-
-##### name Type
-
-
-`string`
-
-
-
-
-
-##### name Example
-
-```json
-petclinic
-```
-
-
-
-
-#### source
-##### The Project Source object
-
-Describes the project's source - type and location
-
-`source`
-* is **required**
-* type: `object`
-
-##### source Type
-
-Unknown type `object`.
-
-```json
-{
-  "type": "object",
-  "title": "The Project Source object",
-  "description": "Describes the project's source - type and location",
-  "required": [
-    "type",
-    "location"
-  ],
-  "properties": {
-    "type": {
-      "type": "string",
-      "description": "Project's source type.",
-      "examples": [
-        "git",
-        "github",
-        "zip"
-      ]
-    },
-    "location": {
-      "type": "string",
-      "description": "Project's source location address. Should be URL for git and github located projects, or file:// for zip.",
-      "examples": [
-        "git@github.com:spring-projects/spring-petclinic.git"
-      ]
-    }
-  },
-  "simpletype": "`object`"
-}
-```
-
-
-
-
-
-
-
-
-
-
-
-
-## specVersion
-### Devfile Specification Version
-
-`specVersion`
-* is **required**
-* type: `string`
-* defined in this schema
-
-### specVersion Type
-
-
-`string`
-
-
-
-
-
-### specVersion Example
-
-```json
-"0.0.1"
-```
-
-
-## tools
-### The Tools List
-
-Description of the workspace tools, such as editor and plugins
-
-`tools`
-* is **required**
-* type: `object[]`
-
-* defined in this schema
-
-### tools Type
+### components Type
 
 
 Array type: `object[]`
@@ -419,17 +295,18 @@ All items must be of the type:
 
 | Property | Type | Required | Default |
 |----------|------|----------|---------|
-| `args`| array | Optional |  |
-| `command`| array | Optional |  |
+| `args`| array | Optional | `null` |
+| `command`| array | Optional | `null` |
 | `endpoints`| array | Optional |  |
+| `entrypoints`| array | Optional |  |
 | `env`| array | Optional |  |
 | `id`| string | Optional |  |
 | `image`| string | Optional |  |
-| `local`| string | Optional |  |
-| `localContent`| string | Optional |  |
 | `memoryLimit`| string | Optional |  |
 | `mountSources`| boolean | Optional | `"false"` |
 | `name`| string | **Required** |  |
+| `reference`| string | Optional |  |
+| `referenceContent`| string | Optional |  |
 | `selector`|  | Optional |  |
 | `type`| string | **Required** |  |
 | `volumes`| array | Optional |  |
@@ -438,11 +315,13 @@ All items must be of the type:
 
 #### args
 
-The arguments to supply to the command running the dockerimage tool. The arguments are supplied either to the default command provided in the image or to the overridden command.
+The arguments to supply to the command running the dockerimage component. The arguments are supplied either to the default command provided in the image or to the overridden command. Defaults to null, meaning use whatever is defined in the image.
 
 `args`
+
 * is optional
 * type: `string[]`
+* default: `null`
 
 
 ##### args Type
@@ -452,6 +331,7 @@ Array type: `string[]`
 
 All items must be of the type:
 `string`
+
 
 
 
@@ -470,11 +350,13 @@ All items must be of the type:
 
 #### command
 
-The command to run in the dockerimage tool instead of the default one provided in the image.
+The command to run in the dockerimage component instead of the default one provided in the image. Defaults to null, meaning use whatever is defined in the image.
 
 `command`
+
 * is optional
 * type: `string[]`
+* default: `null`
 
 
 ##### command Type
@@ -484,6 +366,7 @@ Array type: `string[]`
 
 All items must be of the type:
 `string`
+
 
 
 
@@ -502,9 +385,10 @@ All items must be of the type:
 
 #### endpoints
 
-Describes dockerimage tool endpoints
+Describes dockerimage component endpoints
 
 `endpoints`
+
 * is optional
 * type: `array`
 
@@ -520,10 +404,10 @@ Unknown type ``.
 ```json
 {
   "type": "array",
-  "description": "Describes dockerimage tool endpoints",
+  "description": "Describes dockerimage component endpoints",
   "items": {
     "name": "object",
-    "description": "Describes dockerimage tool endpoint",
+    "description": "Describes dockerimage component endpoint",
     "required": [
       "name",
       "port"
@@ -531,13 +415,13 @@ Unknown type ``.
     "properties": {
       "name": {
         "type": "string",
-        "title": "The Environment Variable Name",
-        "description": "The environment variable name"
+        "title": "The Endpoint Name",
+        "description": "The Endpoint name"
       },
       "port": {
         "type": "integer",
-        "title": "The Environment Variable Name",
-        "description": "The environment variable name"
+        "title": "The Endpoint Port",
+        "description": "The container port that should be used as endpoint"
       },
       "attributes": {
         "type": "object",
@@ -574,7 +458,176 @@ Unknown type ``.
 
 
   
-Describes dockerimage tool endpoint
+Describes dockerimage component endpoint
+
+
+
+
+
+
+
+
+
+#### entrypoints
+
+
+`entrypoints`
+
+* is optional
+* type: `object[]`
+
+
+##### entrypoints Type
+
+
+Array type: `object[]`
+
+All items must be of the type:
+`object` with following properties:
+
+
+| Property | Type | Required | Default |
+|----------|------|----------|---------|
+| `args`| array | Optional | `null` |
+| `command`| array | Optional | `null` |
+| `containerName`| string | Optional |  |
+| `parentName`| string | Optional |  |
+| `parentSelector`|  | Optional |  |
+
+
+
+#### args
+
+The arguments to supply to the command running the component. The arguments are supplied either to the default command provided in the image of the container or to the overridden command. Defaults to null, meaning use whatever is defined in the image.
+
+`args`
+
+* is optional
+* type: `string[]`
+* default: `null`
+
+
+##### args Type
+
+
+Array type: `string[]`
+
+All items must be of the type:
+`string`
+
+
+
+
+
+
+
+
+##### args Example
+
+```json
+['-R', '-f']
+```
+
+
+
+
+#### command
+
+The command to run in the component instead of the default one provided in the image of the container. Defaults to null, meaning use whatever is defined in the image.
+
+`command`
+
+* is optional
+* type: `string[]`
+* default: `null`
+
+
+##### command Type
+
+
+Array type: `string[]`
+
+All items must be of the type:
+`string`
+
+
+
+
+
+
+
+
+##### command Example
+
+```json
+['/bin/sh', '-c']
+```
+
+
+
+
+#### containerName
+
+The name of the container to apply the entrypoint to. If not specified, the entrypoint is modified on all matching containers.
+
+`containerName`
+
+* is optional
+* type: `string`
+
+##### containerName Type
+
+
+`string`
+
+
+
+
+
+
+
+
+
+#### parentName
+
+The name of the top level object in the referenced object list in which to search for containers. If not specified, the objects to search through can have any name.
+
+`parentName`
+
+* is optional
+* type: `string`
+
+##### parentName Type
+
+
+`string`
+
+
+
+
+
+
+
+
+
+#### parentSelector
+
+The selector on labels of the top level objects in the referenced list in which to search for containers. If not specified, the objects to search through can have any labels.
+
+`parentSelector`
+
+* is optional
+* type: reference
+
+##### parentSelector Type
+
+
+* []() – `#/definitions/selector`
+
+
+
+
+
 
 
 
@@ -589,6 +642,7 @@ Describes dockerimage tool endpoint
 The environment variables list that should be set to docker container
 
 `env`
+
 * is optional
 * type: `object[]`
 
@@ -615,6 +669,7 @@ All items must be of the type:
 The environment variable name
 
 `name`
+
 * is **required**
 * type: `string`
 
@@ -630,12 +685,14 @@ The environment variable name
 
 
 
+
 #### value
 ##### The Environment Variable Value
 
 The environment variable value
 
 `value`
+
 * is **required**
 * type: `string`
 
@@ -643,6 +700,7 @@ The environment variable value
 
 
 `string`
+
 
 
 
@@ -664,9 +722,10 @@ Describes environment variable
 
 #### id
 
-Describes the tool FQN
+Describes the component id. It has the following format: [{REGISTRY_URL}/]{plugin/editor ID}:{plugin/editor VERSION}, where `{REGISTRY_URL}/` is an optional part.
 
 `id`
+
 * is optional
 * type: `string`
 
@@ -677,22 +736,37 @@ Describes the tool FQN
 
 
 
+All instances must conform to this regular expression 
+```regex
+^((https?://)[a-zA-Z0-9_\-\./]+)?[a-zA-Z0-9_\-\.]{1,}:[a-zA-Z0-9_\-\.]{1,}$
+```
+
+* test example: [org.eclipse.che.maven-jdk8:1.0.0](https://regexr.com/?expression=%5E((https%3F%3A%2F%2F)%5Ba-zA-Z0-9_%5C-%5C.%2F%5D%2B)%3F%5Ba-zA-Z0-9_%5C-%5C.%5D%7B1%2C%7D%3A%5Ba-zA-Z0-9_%5C-%5C.%5D%7B1%2C%7D%24&text=org.eclipse.che.maven-jdk8%3A1.0.0)
+* test example: [https://che-plugin-registry.openshift.io/org.eclipse.che.maven-jdk8:1.0.0](https://regexr.com/?expression=%5E((https%3F%3A%2F%2F)%5Ba-zA-Z0-9_%5C-%5C.%2F%5D%2B)%3F%5Ba-zA-Z0-9_%5C-%5C.%5D%7B1%2C%7D%3A%5Ba-zA-Z0-9_%5C-%5C.%5D%7B1%2C%7D%24&text=https%3A%2F%2Fche-plugin-registry.openshift.io%2Forg.eclipse.che.maven-jdk8%3A1.0.0)
 
 
-##### id Example
+
+
+##### id Examples
 
 ```json
-eclipse/maven-jdk8:1.0.0
+org.eclipse.che.maven-jdk8:1.0.0
 ```
+
+```json
+https://che-plugin-registry.openshift.io/org.eclipse.che.maven-jdk8:1.0.0
+```
+
 
 
 
 
 #### image
 
-Specifies the docker image that should be used for tool
+Specifies the docker image that should be used for component
 
 `image`
+
 * is optional
 * type: `string`
 
@@ -700,6 +774,7 @@ Specifies the docker image that should be used for tool
 
 
 `string`
+
 
 
 
@@ -714,63 +789,12 @@ eclipse/maven-jdk8:1.0.0
 
 
 
-#### local
-
-Describes location of Kubernetes list yaml file. Applicable only for 'kubernetes' and 'openshift' type tools
-
-`local`
-* is optional
-* type: `string`
-
-##### local Type
-
-
-`string`
-
-
-
-
-
-##### local Example
-
-```json
-petclinic-app.yaml
-```
-
-
-
-
-#### localContent
-
-Inlined content of a file specified in field 'local'
-
-`localContent`
-* is optional
-* type: `string`
-
-##### localContent Type
-
-
-`string`
-
-
-
-
-
-##### localContent Example
-
-```json
-{"kind":"List","items":[{"apiVersion":"v1","kind":"Pod","metadata":{"name":"ws"},"spec":{"containers":[{"image":"eclipse/che-dev:nightly"}]}}]}
-```
-
-
-
-
 #### memoryLimit
 
-Describes memory limit for the tool. You can express memory as a plain integer or as a fixed-point integer using one of these suffixes: E, P, T, G, M, K. You can also use the power-of-two equivalents: Ei, Pi, Ti, Gi, Mi, Ki
+Describes memory limit for the component. You can express memory as a plain integer or as a fixed-point integer using one of these suffixes: E, P, T, G, M, K. You can also use the power-of-two equivalents: Ei, Pi, Ti, Gi, Mi, Ki
 
 `memoryLimit`
+
 * is optional
 * type: `string`
 
@@ -778,6 +802,7 @@ Describes memory limit for the tool. You can express memory as a plain integer o
 
 
 `string`
+
 
 
 
@@ -807,9 +832,10 @@ Describes memory limit for the tool. You can express memory as a plain integer o
 
 #### mountSources
 
-Describes whether projects sources should be mount to the tool. `CHE_PROJECTS_ROOT` environment variable should contains a path where projects sources are mount
+Describes whether projects sources should be mount to the component. `CHE_PROJECTS_ROOT` environment variable should contains a path where projects sources are mount
 
 `mountSources`
+
 * is optional
 * type: `boolean`
 * default: `"false"`
@@ -828,9 +854,10 @@ Describes whether projects sources should be mount to the tool. `CHE_PROJECTS_RO
 
 #### name
 
-Describes the name of the tool. Should be unique per tool set.
+Describes the name of the component. Should be unique per components set.
 
 `name`
+
 * is **required**
 * type: `string`
 
@@ -838,6 +865,7 @@ Describes the name of the tool. Should be unique per tool set.
 
 
 `string`
+
 
 
 
@@ -852,11 +880,68 @@ mvn-stack
 
 
 
+#### reference
+
+Describes absolute or devfile-relative location of Kubernetes list yaml file. Applicable only for 'kubernetes' and 'openshift' type components
+
+`reference`
+
+* is optional
+* type: `string`
+
+##### reference Type
+
+
+`string`
+
+
+
+
+
+
+##### reference Example
+
+```json
+petclinic-app.yaml
+```
+
+
+
+
+#### referenceContent
+
+Inlined content of a file specified in field 'reference'
+
+`referenceContent`
+
+* is optional
+* type: `string`
+
+##### referenceContent Type
+
+
+`string`
+
+
+
+
+
+
+##### referenceContent Example
+
+```json
+{"kind":"List","items":[{"apiVersion":"v1","kind":"Pod","metadata":{"name":"ws"},"spec":{"containers":[{"image":"eclipse/che-dev:nightly"}]}}]}
+```
+
+
+
+
 #### selector
 
-Describes the objects selector for the recipe type tools. Allows to pick-up only selected items from k8s/openshift list
+Describes the objects selector for the recipe type components. Allows to pick-up only selected items from k8s/openshift list
 
 `selector`
+
 * is optional
 * type: reference
 
@@ -882,9 +967,10 @@ Describes the objects selector for the recipe type tools. Allows to pick-up only
 
 #### type
 
-Describes type of the tool, e.g. whether it is an plugin or editor or other type
+Describes type of the component, e.g. whether it is an plugin or editor or other type
 
 `type`
+
 * is **required**
 * type: `string`
 
@@ -892,6 +978,7 @@ Describes type of the tool, e.g. whether it is an plugin or editor or other type
 
 
 `string`
+
 
 
 
@@ -925,9 +1012,10 @@ dockerimage
 
 #### volumes
 
-Describes volumes which should be mount to tool
+Describes volumes which should be mount to component
 
 `volumes`
+
 * is optional
 * type: `object[]`
 
@@ -951,9 +1039,9 @@ All items must be of the type:
 #### containerPath
 ##### The path where volume should be mount to container
 
-undefined
 
 `containerPath`
+
 * is **required**
 * type: `string`
 
@@ -961,6 +1049,7 @@ undefined
 
 
 `string`
+
 
 
 
@@ -978,9 +1067,10 @@ undefined
 #### name
 ##### The Volume Name
 
-The volume name. If several tools mount the same volume then they will reuse the volume and will be able to access to the same files
+The volume name. If several components mount the same volume then they will reuse the volume and will be able to access to the same files
 
 `name`
+
 * is **required**
 * type: `string`
 
@@ -988,6 +1078,7 @@ The volume name. If several tools mount the same volume then they will reuse the
 
 
 `string`
+
 
 
 
@@ -1002,7 +1093,7 @@ my-data
 
 
   
-Describe volume that should be mount to tool
+Describe volume that should be mount to component
 
 
 
@@ -1015,4 +1106,364 @@ Describe volume that should be mount to tool
 
 
 
+
+
+## name
+### Devfile Name
+
+The name of the devfile. Workspaces created from devfile, will inherit this name
+
+`name`
+
+* is **required**
+* type: `string`
+* defined in this schema
+
+### name Type
+
+
+`string`
+
+
+
+
+
+
+### name Example
+
+```json
+"petclinic-dev-environment"
+```
+
+
+## projects
+### The Projects List
+
+Description of the projects, containing names and sources locations
+
+`projects`
+
+* is optional
+* type: `object[]`
+* defined in this schema
+
+### projects Type
+
+
+Array type: `object[]`
+
+All items must be of the type:
+`object` with following properties:
+
+
+| Property | Type | Required |
+|----------|------|----------|
+| `clonePath`| string | Optional |
+| `name`| string | **Required** |
+| `source`| object | **Required** |
+
+
+
+#### clonePath
+
+The path relative to the root of the projects to which this project should be cloned into. This is a unix-style relative path (i.e. uses forward slashes). The path is invalid if it is absolute or tries to escape the project root through the usage of '..'. If not specified, defaults to the project name.
+
+`clonePath`
+
+* is optional
+* type: `string`
+
+##### clonePath Type
+
+
+`string`
+
+
+
+
+
+
+
+
+
+#### name
+##### The Project Name
+
+
+`name`
+
+* is **required**
+* type: `string`
+
+##### name Type
+
+
+`string`
+
+
+
+
+
+
+##### name Example
+
+```json
+petclinic
+```
+
+
+
+
+#### source
+##### The Project Source object
+
+Describes the project's source - type and location
+
+`source`
+
+* is **required**
+* type: `object`
+
+##### source Type
+
+
+`object` with following properties:
+
+
+| Property | Type | Required |
+|----------|------|----------|
+| `branch`| string | Optional |
+| `commitId`| string | Optional |
+| `location`| string | **Required** |
+| `startPoint`| string | Optional |
+| `tag`| string | Optional |
+| `type`| string | **Required** |
+
+
+
+#### branch
+
+The name of the of the branch to check out after obtaining the source from the location. The branch has to already exist in the source otherwise the default branch is used. In case of git, this is also the name of the remote branch to push to.
+
+`branch`
+
+* is optional
+* type: `string`
+
+##### branch Type
+
+
+`string`
+
+
+
+
+
+
+##### branch Examples
+
+```json
+master
+```
+
+```json
+feature-42
+```
+
+
+
+
+
+#### commitId
+
+The id of the commit to reset the checked out branch to. Note that this is equivalent to 'startPoint' and provided for convenience.
+
+`commitId`
+
+* is optional
+* type: `string`
+
+##### commitId Type
+
+
+`string`
+
+
+
+
+
+
+##### commitId Example
+
+```json
+349d3ad
+```
+
+
+
+
+#### location
+
+Project's source location address. Should be URL for git and github located projects, or file:// for zip.
+
+`location`
+
+* is **required**
+* type: `string`
+
+##### location Type
+
+
+`string`
+
+
+
+
+
+
+##### location Example
+
+```json
+git@github.com:spring-projects/spring-petclinic.git
+```
+
+
+
+
+#### startPoint
+
+The tag or commit id to reset the checked out branch to.
+
+`startPoint`
+
+* is optional
+* type: `string`
+
+##### startPoint Type
+
+
+`string`
+
+
+
+
+
+
+##### startPoint Examples
+
+```json
+release/4.2
+```
+
+```json
+349d3ad
+```
+
+```json
+v4.2.0
+```
+
+
+
+
+
+#### tag
+
+The name of the tag to reset the checked out branch to. Note that this is equivalent to 'startPoint' and provided for convenience.
+
+`tag`
+
+* is optional
+* type: `string`
+
+##### tag Type
+
+
+`string`
+
+
+
+
+
+
+##### tag Example
+
+```json
+v4.2.0
+```
+
+
+
+
+#### type
+
+Project's source type.
+
+`type`
+
+* is **required**
+* type: `string`
+
+##### type Type
+
+
+`string`
+
+
+
+
+
+
+##### type Examples
+
+```json
+git
+```
+
+```json
+github
+```
+
+```json
+zip
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## specVersion
+### Devfile Specification Version
+
+`specVersion`
+
+* is **required**
+* type: `string`
+* defined in this schema
+
+### specVersion Type
+
+
+`string`
+
+
+
+
+
+
+### specVersion Example
+
+```json
+"0.0.1"
+```
 

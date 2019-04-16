@@ -3,15 +3,18 @@
 ### Introduction
 Previously, two kind of recipes were available to bootstrap a cloud developer workspace and to make it portable: [Chefile](https://www.eclipse.org/che/docs/chefile.html) 
 and [Factories](https://www.eclipse.org/che/docs/factories-getting-started.html#try-a-factory).
-As a continuation of this, the brand new `devfile` format was introduced, which combines simplicity and support for high variety of different tools available to develop a container based application.
+As a continuation of this, the brand new `devfile` format was introduced, which combines simplicity and support for high variety of different components available to develop a container based application.
 
 ### What the devfile consists of
 The minimal devfile sufficient to run a workspace from it, consists of the following parts:
  - Specification version
  - Name
- - A list of tools: the development tools and user runtimes 
- 
+
+Without any further configuration a workspace with default editor will be launched along with its default plugins which are configured on Che Server.
+By default, `Che Theia` is configured as a default one along with `Che Machine Exec` plugin.
+
 To get more functional workspace, the following parts can be added:
+ - A list of components: the development components and user runtimes
  - A list of projects: the source code repositories
  - A list of commands: actions to manage the workspace components like running the dev tools, starting the runtime environments etc...
 
@@ -27,7 +30,7 @@ projects:
     source:
       type: git
       location: 'https://github.com/che-samples/web-java-spring-petclinic.git'
-tools:
+components:
   - name: theia-editor
     type: cheEditor
     id: org.eclipse.che.editor.theia:1.0.0
@@ -42,7 +45,7 @@ For the detailed explanation of all devfile components assignment and possible v
 
 ### Getting Started
 The simplest way to use devfile is to have it deployed into GitHub source repository and then create factory from this repo.
-This is as simple as create `.devfile` file in the root of your GH repo, and then execute the factory: 
+This is as simple as create `devfile.yaml` file in the root of your GH repo, and then execute the factory: 
 ```
 https://<your-che-host>/f?url=https://github.com/mygroup/myrepo
 ```
@@ -59,37 +62,67 @@ curl -X POST  -H "Authorization: <TOKEN>" -H "Content-Type: application/yaml" -d
 If you're a user of `chectl` tool, it is also possible to execute workspace from devfile, using `workspace:start` command 
 parameter as follows:
 ```
-chectl workspace:start --devfile=.devfile
+chectl workspace:start --devfile=devfile.yaml
 ```` 
 Please note that currently this way only works for the local (same machine) devfiles - URL can't be used here atm.
 
+### Project details
+A single devfile can specify several projects. For each project, one has to specify the type of the
+source repository, its location and optionally also the directory to which the project should be 
+cloned to.
 
+As an example, consider this devfile:
+
+```yaml
+specVersion: 0.0.1
+name: example-devfile
+projects:
+- name: frontend
+  source:
+    type: git
+    location: https://github.com/acmecorp/frontend.git
+- name: backend
+  clonePath: src/github.com/acmecorp/backend
+  source:
+    type: git
+    location: https://github.com/acmecorp/backend.git
+```
+
+In the example above, we see a devfile with 2 projects, `frontend` and `backend`, each located in
+its own repository on github. `backend` has a specific requirement to be cloned into the 
+`src/github.com/acmecorp/backend` directory under the source root (implicitly defined by the Che
+runtime) while frontend will be cloned into `frontend` directory under the source root.
  
-### Supported Tool types
-There are currently four types of tools supported. There is two simpler types, such as `cheEditor` and `chePlugin` and 
+### Supported component types
+There are currently four types of components supported. There is two simpler types, such as `cheEditor` and `chePlugin` and 
 two more complex - `kubernetes` (or `openshift`) and `dockerimage`.
-Please note that all tools inside single devfile must have unique names.
-Detailed tool types explanation below:
+Please note that all components inside single devfile must have unique names.
+Detailed component types explanation below:
 
 #### cheEditor 
-Describes the editor which used in workspace by defining it's id. 
-Devfile can only contain one tool with `cheEditor` type.
+Describes the editor which used in workspace by defining its id.
+Devfile can only contain one component with `cheEditor` type.
 
 ```
 ...
-tools:
+components:
   - name: theia-editor
     type: cheEditor
     id: org.eclipse.che.editor.theia:1.0.0
 ```
 
+If it is missing then a default editor will be provided along with its default plugins.
+The default plugins will be provided also for an explicitly defined editor with the same ID as the default one (even if in a different version).
+By default, `Che Theia` is configured as default editor along with `Che Machine Exec` plugin.
+You're able to put `editorFree:true` attribute into Devfile attributes in case you do not need any editor in your workspace.
+
 #### chePlugin
 Describes the plugin which used in workspace by defining it's id. 
-It is allowed to have several `chePlugin` tools.
+It is allowed to have several `chePlugin` components.
 
 ```
 ...
-  tools:
+  components:
    - name: exec-plugin
      type: chePlugin
      id: che-machine-exec-plugin:0.0.1
@@ -101,29 +134,27 @@ List of available Che plugins and more information about registry can be found o
 
 
 #### kubernetes/openshift
-More complex tool type, which allows to apply configuration from kubernetes/openshift lists. Content of the tool may be provided either via `local` attribute which points to the file with tool content.
-Currently, devfile can only contain one tool with `kubernetes` or `openshift` type.
+More complex component type, which allows to apply configuration from kubernetes/openshift lists. Content of the component may be provided either via `reference` attribute which points to the file with component content.
 ```
 ...
-  tools:
+  components:
     - name: mysql
       type: kubernetes
-      local: petclinic.yaml
+      reference: petclinic.yaml
       selector:
         app.kubernetes.io/name: mysql
         app.kubernetes.io/component: database
         app.kubernetes.io/part-of: petclinic
 ```
-Contents of the `local` file is currently read _ONLY_ if the devfile and local file both placed in the same public GitHub repository. 
-So, alternatively, if you need to post devfile with such tools to REST API, contents of K8S/Openshift list can be embedded into devfile using `localContent` field:
+Alternatively, if you need to post devfile with such components to REST API, contents of K8S/Openshift list can be embedded into devfile using `referenceContent` field:
 
 ```
 ...
-  tools:
+  components:
     - name: mysql
       type: kubernetes
-      local: petclinic.yaml
-       localContent: |
+      reference: petclinic.yaml
+      referenceContent: |
            kind: List
            items:
             -
@@ -136,14 +167,52 @@ So, alternatively, if you need to post devfile with such tools to REST API, cont
               ... etc
 ```
 
+As with `dockerimage` component described below, it is possible to override the entrypoint of the
+containers contained in the Kubernetes/Openshift list using the `command` and `args` properties (as
+[understood](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#notes)
+by Kubernetes). Of course, there can be more containers in the list (contained in pods or pod
+templates of deployments) and so there needs to be a way of selecting which containers to apply the
+entrypoint changes to.
+
+The entrypoints can be defined for example like this:
+
+```yaml
+...
+  components:
+    - name: appDeployment
+      type: kubernetes
+      reference: app-deployment.yaml
+      entrypoints:
+      - parentName: mysqlServer
+        command: ['sleep']
+        args: ['infinity']
+      - parentSelector:
+          app: prometheus
+        args: ['-f', '/opt/app/prometheus-config.yaml']
+```
+
+You can see that the `entrypoints` list contains constraints for picking the containers along with
+the command/args to apply to them. In the example above, the constraint is `parentName: mysqlServer`
+which will cause the command to be applied to all containers defined in any parent object called
+`mysqlServer`. The parent object is assumed to be a top level object in the list defined in the
+referenced file, e.g. `app-deployment.yaml` in the example above.
+
+Other types of constraints (and their combinations) are possible:
+
+* `containerName` - the name of the container
+* `parentName` - the name of the parent object that (indirectly) contains the containers to override
+* `parentSelector` - the set of labels the parent object needs to have
+
+Combination of these constraints can be used to precisely locate the containers inside the 
+referenced Kubernetes list.
 
 #### dockerimage
-Tool type which allows to define docker image based configuration of container in workspace.
-Devfile can only contain one tool with `dockerimage` type. 
+Component type which allows to define docker image based configuration of container in workspace.
+Devfile can only contain one component with `dockerimage` type. 
 
 ```
  ...
- tools:
+ components:
    - name: maven
      type: dockerimage
      image: eclipe/maven-jdk8:latest
@@ -167,7 +236,7 @@ Devfile can only contain one tool with `dockerimage` type.
 ```
 
 ### Commands expanded
-Devfile allows to specify commands set to be available for execution in workspace. Each command may contain subset of actions, which are related to specific tool, in whose container it will be executed.
+Devfile allows to specify commands set to be available for execution in workspace. Each command may contain subset of actions, which are related to specific component, in whose container it will be executed.
 
 
 ```
@@ -176,16 +245,17 @@ Devfile allows to specify commands set to be available for execution in workspac
    - name: build
      actions:
        - type: exec
-         tool: mysql
+         component: mysql
          command: mvn clean
          workdir: /projects/spring-petclinic
 ```
 
 ### Live working examples
 
-  - [NodeJS simple "Hello World" example](https://che.openshift.io/f?url=https://raw.githubusercontent.com/redhat-developer/devfile/master/samples/web-nodejs-sample/devfile.yml)
-  - [Java Spring-Petclinic example](https://che.openshift.io/f?url=https://raw.githubusercontent.com/redhat-developer/devfile/master/samples/web-java-spring-petclinic/devfile.yml)
-  - [Theia frontend plugin example](https://che.openshift.io/f?url=https://raw.githubusercontent.com/redhat-developer/devfile/master/samples/theia-hello-world-frontend-plugin/devfile.yml)
+  - [NodeJS simple "Hello World" example](https://che.openshift.io/f?url=https://raw.githubusercontent.com/redhat-developer/devfile/master/samples/web-nodejs-sample/devfile.yaml)
+  - [NodeJS Application with Mongo DB example](https://che.openshift.io/f?url=https://raw.githubusercontent.com/redhat-developer/devfile/master/samples/web-nodejs-with-db-sample/devfile.yaml)
+  - [Java Spring-Petclinic example](https://che.openshift.io/f?url=https://raw.githubusercontent.com/redhat-developer/devfile/master/samples/web-java-spring-petclinic/devfile.yaml)
+  - [Theia frontend plugin example](https://che.openshift.io/f?url=https://raw.githubusercontent.com/redhat-developer/devfile/master/samples/theia-hello-world-frontend-plugin/devfile.yaml)
 
 ### Planned features
-There is still a lot of plans to extend Devfile possibilities, such as support multiple kubernetes/openshift tools etc
+There is still a lot of plans to extend Devfile possibilities, such as support multiple dockerimage components etc
