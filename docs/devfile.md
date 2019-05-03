@@ -295,6 +295,7 @@ All items must be of the type:
 
 | Property | Type | Required | Default |
 |----------|------|----------|---------|
+| `alias`| string | Optional |  |
 | `args`| array | Optional | `null` |
 | `command`| array | Optional | `null` |
 | `endpoints`| array | Optional |  |
@@ -304,12 +305,39 @@ All items must be of the type:
 | `image`| string | Optional |  |
 | `memoryLimit`| string | Optional |  |
 | `mountSources`| boolean | Optional | `"false"` |
-| `name`| string | **Required** |  |
 | `reference`| string | Optional |  |
 | `referenceContent`| string | Optional |  |
 | `selector`|  | Optional |  |
 | `type`| string | **Required** |  |
 | `volumes`| array | Optional |  |
+
+
+
+#### alias
+
+The name using which other places of this devfile (like commands) can refer to this component. This attribute is optional but must be unique in the devfile if specified.
+
+`alias`
+
+* is optional
+* type: `string`
+
+##### alias Type
+
+
+`string`
+
+
+
+
+
+
+##### alias Example
+
+```json
+mvn-stack
+```
+
 
 
 
@@ -738,11 +766,11 @@ Describes the component id. It has the following format: [{REGISTRY_URL}/]{plugi
 
 All instances must conform to this regular expression 
 ```regex
-^((https?://)[a-zA-Z0-9_\-\./]+)?[a-zA-Z0-9_\-\.]{1,}:[a-zA-Z0-9_\-\.]{1,}$
+^((https?://)[a-zA-Z0-9_\-./]+/)?[a-z0-9_\-.]+/[a-z0-9_\-.]+/[a-z0-9_\-.]+$
 ```
 
-* test example: [org.eclipse.che.maven-jdk8:1.0.0](https://regexr.com/?expression=%5E((https%3F%3A%2F%2F)%5Ba-zA-Z0-9_%5C-%5C.%2F%5D%2B)%3F%5Ba-zA-Z0-9_%5C-%5C.%5D%7B1%2C%7D%3A%5Ba-zA-Z0-9_%5C-%5C.%5D%7B1%2C%7D%24&text=org.eclipse.che.maven-jdk8%3A1.0.0)
-* test example: [https://che-plugin-registry.openshift.io/org.eclipse.che.maven-jdk8:1.0.0](https://regexr.com/?expression=%5E((https%3F%3A%2F%2F)%5Ba-zA-Z0-9_%5C-%5C.%2F%5D%2B)%3F%5Ba-zA-Z0-9_%5C-%5C.%5D%7B1%2C%7D%3A%5Ba-zA-Z0-9_%5C-%5C.%5D%7B1%2C%7D%24&text=https%3A%2F%2Fche-plugin-registry.openshift.io%2Forg.eclipse.che.maven-jdk8%3A1.0.0)
+* test example: [org.eclipse.che.maven-jdk8:1.0.0](https://regexr.com/?expression=%5E((https%3F%3A%2F%2F)%5Ba-zA-Z0-9_%5C-.%2F%5D%2B%2F)%3F%5Ba-z0-9_%5C-.%5D%2B%2F%5Ba-z0-9_%5C-.%5D%2B%2F%5Ba-z0-9_%5C-.%5D%2B%24&text=org.eclipse.che.maven-jdk8%3A1.0.0)
+* test example: [https://che-plugin-registry.openshift.io/org.eclipse.che.maven-jdk8:1.0.0](https://regexr.com/?expression=%5E((https%3F%3A%2F%2F)%5Ba-zA-Z0-9_%5C-.%2F%5D%2B%2F)%3F%5Ba-z0-9_%5C-.%5D%2B%2F%5Ba-z0-9_%5C-.%5D%2B%2F%5Ba-z0-9_%5C-.%5D%2B%24&text=https%3A%2F%2Fche-plugin-registry.openshift.io%2Forg.eclipse.che.maven-jdk8%3A1.0.0)
 
 
 
@@ -848,34 +876,6 @@ Describes whether projects sources should be mount to the component. `CHE_PROJEC
 
 
 
-
-
-
-
-#### name
-
-Describes the name of the component. Should be unique per components set.
-
-`name`
-
-* is **required**
-* type: `string`
-
-##### name Type
-
-
-`string`
-
-
-
-
-
-
-##### name Example
-
-```json
-mvn-stack
-```
 
 
 
