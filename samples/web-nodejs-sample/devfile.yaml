@@ -6,10 +6,10 @@ projects:
       type: git
       location: 'https://github.com/che-samples/web-nodejs-sample.git'
 components:
-  - name: theia-editor
+  - alias: theia-editor
     type: cheEditor
     id: org.eclipse.che.editor.theia:1.0.0
-  - name: exec-plugin
+  - alias: exec-plugin
     type: chePlugin
     id: che-machine-exec-plugin:0.0.1
 commands:

@@ -19,8 +19,8 @@ Devfile *-- "n" Command
 Devfile *-- "n" Project
 
 class Tool {
-    - name
     - type
+    - alias
 }
 
 
