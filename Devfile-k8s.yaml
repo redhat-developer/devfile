@@ -1,0 +1,29 @@
+---
+specVersion: 0.0.1
+name: petclinic-dev-environment
+projects:
+  - name: petclinic
+    source:
+      type: git
+      location: 'https://github.com/spring-projects/spring-petclinic.git'
+components:
+  - type: kubernetes
+    alias: mvn-container
+    reference: https://gist.githubusercontent.com/l0rd/52eda1d1b57878a218cba17c0c93a477/raw/9a2d56e777d22e77c25c45744caea35bb62d8688/petclinic.yaml
+    selector:
+      app.kubernetes.io/component: webapp
+  - type: kubernetes
+    reference: https://gist.githubusercontent.com/l0rd/52eda1d1b57878a218cba17c0c93a477/raw/9a2d56e777d22e77c25c45744caea35bb62d8688/petclinic.yaml
+    selector:
+      app.kubernetes.io/component: database
+  - type: cheEditor
+    id: eclipse/che-theia/next
+  - type: chePlugin
+    id: redhat/java/0.43.0
+commands:
+  - name: build
+    actions:
+      - type: exec
+        component: mvn-container
+        command: mvn package
+        workdir: /projects/spring-petclinic
