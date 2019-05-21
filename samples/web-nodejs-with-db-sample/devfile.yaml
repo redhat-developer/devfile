@@ -6,16 +6,16 @@ projects:
       type: git
       location: 'https://github.com/ijason/NodeJS-Sample-App.git'
 components:
-  - name: theia-editor
+  - alias: theia-editor
     type: cheEditor
     id: org.eclipse.che.editor.theia:1.0.0
-  - name: exec-plugin
+  - alias: exec-plugin
     type: chePlugin
     id: che-machine-exec-plugin:0.0.1
-  - name: mongodb
+  - alias: mongodb
     type: kubernetes
     reference: mongo-db.yaml
-  - name: nodejs-app
+  - alias: nodejs-app
     type: openshift
     reference: nodejs.yaml
 commands:
