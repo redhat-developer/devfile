@@ -19,7 +19,8 @@ This schema describes the structure of the devfile object
 | [components](#components) | `object[]` | Optional  | No | Devfile object (this schema) |
 | [name](#name) | `string` | **Required**  | No | Devfile object (this schema) |
 | [projects](#projects) | `object[]` | Optional  | No | Devfile object (this schema) |
-| [specVersion](#specversion) | `string` | **Required**  | No | Devfile object (this schema) |
+| [apiVersion](#apiversion) | `string` | **Required**  | No | Devfile object (this schema) |
+| [metadata](#metadata) | `object` | **Required** | No | Devfile object (this schema) |
 
 ## attributes
 
@@ -1442,16 +1443,16 @@ zip
 
 
 
-## specVersion
-### Devfile Specification Version
+## apiVersion
+### Devfile API Version
 
-`specVersion`
+`apiVersion`
 
 * is **required**
 * type: `string`
 * defined in this schema
 
-### specVersion Type
+### apiVersion Type
 
 
 `string`
@@ -1461,9 +1462,27 @@ zip
 
 
 
-### specVersion Example
+### apiVersion Example
 
 ```json
 "0.0.1"
 ```
 
+## metadata
+
+
+`metadata`
+
+* is required
+* type: `object`
+* defined in this schema
+
+### metadata Type
+
+
+`object` with following properties:
+
+
+| Property | Type | Required |
+|----------|------|----------|
+| `name`   | string | **Required** |

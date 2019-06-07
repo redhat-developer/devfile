@@ -1,22 +1,28 @@
 @startuml devfile_next
 
 class Devfile {
-  - specVersion
-  - name
+  - apiVersion
+  - metadata
   - commands
   - components
   - projects
 }
 
 together {
+  class Metadata
   class Component
   class Command
   class Project
 }
 
+Devfile *-- "1" Metadata
 Devfile *-- "n" Component
 Devfile *-- "n" Command
 Devfile *-- "n" Project
+
+class Metadata {
+  - name
+}
 
 class Component {
     - type
