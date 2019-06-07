@@ -1,5 +1,6 @@
-specVersion: 0.0.1
-name: spring-petclinic
+apiVersion: 0.0.1
+metadata:
+  name: spring-petclinic
 projects:
   - name: spring-petclinic
     source:
