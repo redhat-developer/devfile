@@ -11,7 +11,7 @@ components:
     reference: mongo-db.yaml
   - alias: nodejs-app
     type: openshift
-    reference: nodejs.yaml
+    reference: nodejs-app.yaml
 commands:
   - name: run
     actions:
