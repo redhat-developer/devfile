@@ -1,0 +1,49 @@
+---
+apiVersion: 1.0.0
+metadata:
+  name: vaadin-addressbook
+attributes:
+  persistVolumes: 'false'
+projects:
+  - name: addressbook
+    source:
+      type: git
+      location: 'https://github.com/vaadin/addressbook.git'
+components:
+  -
+    type: chePlugin
+    id: redhat/java/latest
+  -
+    type: dockerimage
+    alias: maven
+    image: quay.io/eclipse/che-java11-maven:nightly
+    env:
+      - name: MAVEN_CONFIG
+        value: /home/user/.m2
+      - name: MAVEN_OPTS
+        value: "-XX:MaxRAMPercentage=50 -XX:+UseParallelGC -XX:MinHeapFreeRatio=10
+          -XX:MaxHeapFreeRatio=20 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90
+          -Dsun.zip.disableMemoryMapping=true -Xms20m -Djava.security.egd=file:/dev/./urandom
+          -Duser.home=/home/user"
+      - name: JAVA_OPTS
+        value: "-XX:MaxRAMPercentage=50 -XX:+UseParallelGC -XX:MinHeapFreeRatio=10
+          -XX:MaxHeapFreeRatio=20 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90
+          -Dsun.zip.disableMemoryMapping=true -Xms20m -Djava.security.egd=file:/dev/./urandom"
+      - name: JAVA_TOOL_OPTIONS
+        value: "-XX:MaxRAMPercentage=50 -XX:+UseParallelGC -XX:MinHeapFreeRatio=10
+          -XX:MaxHeapFreeRatio=20 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90
+          -Dsun.zip.disableMemoryMapping=true -Xms20m -Djava.security.egd=file:/dev/./urandom"
+    memoryLimit: 512Mi
+    endpoints:
+      - name: '8080/tcp'
+        port: 8080
+    mountSources: true
+    volumes:
+      - name: m2
+        containerPath: /home/user/.m2
+commands:
+  - name: run
+    actions:
+      - type: exec
+        component: maven
+        command: "mvn -f ${CHE_PROJECTS_ROOT}/addressbook jetty:run"
