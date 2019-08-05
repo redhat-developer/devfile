@@ -48,11 +48,16 @@ class CommandAction {
   - type
   - component
   - command
+  - reference
+  - referenceContent
 }
 
 class Project {
   - name
   - source
+  - clonePath
+  - reference
+  - referenceContent
 }
 
 Project o-- "1" ProjectSource
@@ -61,6 +66,9 @@ class ProjectSource {
   - type
   - location
   - branch
+  - startPoint
+  - tag
+  - commitId
 }
 
 Project -[hidden]> Component
@@ -83,6 +91,7 @@ class Openshift {
   - referenceContent
   - selector
   - entrypoints
+  - memoryLimit
 }
 
 class Kubernetes {
@@ -90,15 +99,20 @@ class Kubernetes {
   - referenceContent
   - selector
   - entrypoints
+  - memoryLimit
 }
 
 class ChePlugin #yellow {
   - id
+  - reference
+  - registryUrl
 }
 note bottom of ChePlugin: Che specific
 
 class CheEditor #yellow {
   - id
+  - reference
+  - registryUrl
 }
 note bottom of CheEditor: Che specific
 
