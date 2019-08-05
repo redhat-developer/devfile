@@ -56,8 +56,6 @@ class Project {
   - name
   - source
   - clonePath
-  - reference
-  - referenceContent
 }
 
 Project o-- "1" ProjectSource
