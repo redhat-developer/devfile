@@ -47,3 +47,8 @@ commands:
       - type: exec
         component: maven
         command: "mvn -f ${CHE_PROJECTS_ROOT}/addressbook jetty:run"
+  - name: stop
+    actions:
+      - type: exec
+        component: maven
+        command: "echo 'Stopping the application...' && kill $(pidof java) && echo 'The application has been successfully stopped'"
