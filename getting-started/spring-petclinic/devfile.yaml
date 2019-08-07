@@ -53,6 +53,13 @@ commands:
           java -jar -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005 \
           target/*.jar
         workdir: ${CHE_PROJECTS_ROOT}/java-web-spring
+  -
+    name: stop webapp
+    actions:
+      -
+        type: exec
+        component: tools
+        command: "echo 'Stopping the application...' && kill $(pidof java) && echo 'The application has been successfully stopped'"
   - name: Debug remote java application
     actions:
       - type: vscode-launch
