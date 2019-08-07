@@ -78,3 +78,19 @@ commands:
         type: exec
         component: maven
         command: "echo 'Stopping the application...' && kill $(pidof java) && echo 'The application has been successfully stopped'"
+  - 
+    name: Debug remote java application
+    actions:
+      - type: vscode-launch
+        referenceContent: |
+          {
+          "version": "0.2.0",
+          "configurations": [
+            {
+              "type": "java",
+              "name": "Debug (Attach) - Remote",
+              "request": "attach",
+              "hostName": "localhost",
+              "port": 5005
+            }]
+          }
