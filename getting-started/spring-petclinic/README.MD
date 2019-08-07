@@ -1,0 +1,1 @@
+[![Contribute](https://che.openshift.io/factory/resources/factory-contribute.svg)](https://che.prod-preview.openshift.io/f?url=https://raw.githubusercontent.com/redhat-developer/devfile/master/getting-started/spring-petclinic/devfile.yaml)
