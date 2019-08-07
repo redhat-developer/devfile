@@ -60,6 +60,18 @@ commands:
         command: "mvn clean install -DskipTests=true && java -jar target/*-thorntail.jar"
         workdir: ${CHE_PROJECTS_ROOT}/thorntail-rest-http
   -
+    name: build and run (debugging enabled)
+    actions:
+      -
+        type: exec
+        component: maven
+        command: |
+          mvn clean install -DskipTests=true && \
+          java -jar \
+          -Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=5005 \
+          target/*-thorntail.jar
+        workdir: ${CHE_PROJECTS_ROOT}/thorntail-rest-http
+  -
     name: stop
     actions:
       -
