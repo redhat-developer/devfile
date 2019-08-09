@@ -50,6 +50,7 @@ class CommandAction {
   - command
   - reference
   - referenceContent
+  - workdir
 }
 
 class Project {
@@ -82,6 +83,26 @@ class Dockerimage {
    - endpoints
    - command
    - args
+}
+
+Dockerimage <|-.. Env
+Dockerimage <|-.. Volumes
+Dockerimage <|-.. Endpoints
+
+class Env {
+   - name
+   - value
+}
+
+class Volumes {
+   - name
+   - containerPath
+}
+
+class Endpoints {
+   - name
+   - port
+   - attributes
 }
 
 class Openshift {
