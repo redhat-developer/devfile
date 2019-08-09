@@ -50,11 +50,29 @@
                     "examples": [
                         "petclinic-dev-environment"
                     ]
+                },
+                "generateName": {
+                    "type": "string",
+                    "minLength": 1,
+                    "title": "Devfile Generate Name",
+                    "description": "Workspaces created from devfile, will use it as base and append random suffix. It's used when name is not defined.",
+                    "examples": [
+                        "petclinic-"
+                    ]
                 }
             },
             "additionalProperties": false,
-            "required": [
-                "name"
+            "anyOf": [
+                {
+                    "required": [
+                        "name"
+                    ]
+                },
+                {
+                    "required": [
+                        "generateName"
+                    ]
+                }
             ]
         },
         "projects": {
@@ -219,7 +237,7 @@
                                         "type": "string",
                                         "pattern": "^(https?://)[a-zA-Z0-9_\\-./]+",
                                         "examples": [
-                                            "https://che-plugin-registry.openshift.io/"
+                                            "https://che-plugin-registry.openshift.io/v3/"
                                         ]
                                     },
                                     "memoryLimit": {
@@ -319,6 +337,7 @@
                                 "properties": {
                                     "type": {},
                                     "alias": {},
+                                    "mountSources": {},
                                     "reference": {
                                         "description": "Describes absolute or devfile-relative location of Kubernetes list yaml file. Applicable only for 'kubernetes' and 'openshift' type components",
                                         "type": "string",
@@ -404,6 +423,7 @@
                                 "properties": {
                                     "type": {},
                                     "alias": {},
+                                    "mountSources": {},
                                     "image": {
                                         "type": "string",
                                         "description": "Specifies the docker image that should be used for component",
@@ -420,11 +440,6 @@
                                             "129M",
                                             "123Mi"
                                         ]
-                                    },
-                                    "mountSources": {
-                                        "type": "boolean",
-                                        "description": "Describes whether projects sources should be mount to the component. `CHE_PROJECTS_ROOT` environment variable should contains a path where projects sources are mount",
-                                        "default": "false"
                                     },
                                     "command": {
                                         "type": "array",
@@ -580,6 +595,11 @@
                             "openshift",
                             "dockerimage"
                         ]
+                    },
+                    "mountSources": {
+                        "type": "boolean",
+                        "description": "Describes whether projects sources should be mount to the component. `CHE_PROJECTS_ROOT` environment variable should contains a path where projects sources are mount",
+                        "default": "false"
                     }
                 },
                 "additionalProperties": true
