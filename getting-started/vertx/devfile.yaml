@@ -41,7 +41,7 @@ commands:
       -
         type: exec
         component: maven
-        command: "mvn -Duser.home=${HOME} clean install"
+        command: "mvn clean install"
         workdir: "${CHE_PROJECTS_ROOT}/vertx-http-example"
   -
     name: run app
