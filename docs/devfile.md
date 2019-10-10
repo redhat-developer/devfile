@@ -506,14 +506,15 @@ Describes the project's source - type and location
 
 `object` with following properties:
 
-| Property     | Type   | Required     |
-| ------------ | ------ | ------------ |
-| `branch`     | string | Optional     |
-| `commitId`   | string | Optional     |
-| `location`   | string | **Required** |
-| `startPoint` | string | Optional     |
-| `tag`        | string | Optional     |
-| `type`       | string | **Required** |
+| Property            | Type   | Required     |
+| ------------        | ------ | ------------ |
+| `branch`            | string | Optional     |
+| `commitId`          | string | Optional     |
+| `location`          | string | **Required** |
+| `sparseCheckoutDir` | string | Optional     |
+| `startPoint`        | string | Optional     |
+| `tag`               | string | Optional     |
+| `type`              | string | **Required** |
 
 #### branch
 
@@ -577,6 +578,41 @@ Project's source location address. Should be URL for git and github located proj
 
 ```json
 git@github.com:spring-projects/spring-petclinic.git
+```
+
+#### sparseCheckoutDir
+
+Part of project to populate in the working directory.
+
+`sparseCheckoutDir`
+
+- is optional
+- type: `string`
+
+##### sparseCheckoutDir Type
+
+`string`
+
+##### sparseCheckoutDir Examples
+
+```
+/core/
+```
+
+```
+core/
+```
+
+```
+core
+```
+
+```
+/wsmaster/che-core-api-workspace/
+```
+
+```
+/d*
 ```
 
 #### startPoint
