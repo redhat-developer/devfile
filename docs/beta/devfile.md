@@ -34,7 +34,7 @@ This schema describes the structure of the devfile object
 The value of this property **must** be equal to:
 
 ```json
-"1.0.0"
+"1.0.1-beta"
 ```
 
 ## attributes
@@ -76,6 +76,7 @@ All items must be of the type: `object` with following properties:
 | `actions`    | array  | **Required** |
 | `attributes` |        | Optional     |
 | `name`       | string | **Required** |
+| `previewUrl` | object | Optional     |
 
 #### actions
 
@@ -263,6 +264,47 @@ Describes the name of the command. Should be unique per commands set.
 ```json
 build
 ```
+
+#### previewUrl
+
+`previewUrl`
+
+- is optional
+- type: `object`
+
+##### previewUrl Type
+
+`object` with following properties:
+
+| Property | Type   | Required     |
+| -------- | ------ | ------------ |
+| `path`   | string | Optional     |
+| `port`   | number | **Required** |
+
+#### path
+
+`path`
+
+- is optional
+- type: `string`
+
+##### path Type
+
+`string`
+
+#### port
+
+`port`
+
+- is **required**
+- type: `number`
+
+##### port Type
+
+`number`
+
+- minimum value: `0`
+- maximum value: `65535`
 
 ## components
 
@@ -502,15 +544,14 @@ Describes the project's source - type and location
 
 `object` with following properties:
 
-| Property            | Type   | Required     |
-| ------------------- | ------ | ------------ |
-| `branch`            | string | Optional     |
-| `commitId`          | string | Optional     |
-| `location`          | string | **Required** |
-| `sparseCheckoutDir` | string | Optional     |
-| `startPoint`        | string | Optional     |
-| `tag`               | string | Optional     |
-| `type`              | string | **Required** |
+| Property     | Type   | Required     |
+| ------------ | ------ | ------------ |
+| `branch`     | string | Optional     |
+| `commitId`   | string | Optional     |
+| `location`   | string | **Required** |
+| `startPoint` | string | Optional     |
+| `tag`        | string | Optional     |
+| `type`       | string | **Required** |
 
 #### branch
 
@@ -574,41 +615,6 @@ Project's source location address. Should be URL for git and github located proj
 
 ```json
 git@github.com:spring-projects/spring-petclinic.git
-```
-
-#### sparseCheckoutDir
-
-Part of project to populate in the working directory.
-
-`sparseCheckoutDir`
-
-- is optional
-- type: `string`
-
-##### sparseCheckoutDir Type
-
-`string`
-
-##### sparseCheckoutDir Examples
-
-```json
-/core/
-```
-
-```json
-core/
-```
-
-```json
-core
-```
-
-```json
-/wsmaster/che-core-api-workspace/
-```
-
-```json
-/d*
 ```
 
 #### startPoint
