@@ -149,6 +149,17 @@
                                 "examples": [
                                     "349d3ad"
                                 ]
+                            },
+                            "sparseCheckoutDir": {
+                                "type": "string",
+                                "description": "Allows populating the working directory sparsely",
+                                "examples": [
+                                  "/core/",
+                                  "core/",
+                                  "core",
+                                  "/wsmaster/che-core-api-workspace/",
+                                  "/d*"
+                                ]
                             }
                         }
                     },
