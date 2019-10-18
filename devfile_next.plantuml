@@ -69,6 +69,7 @@ class ProjectSource {
   - startPoint
   - tag
   - commitId
+  - sparseCheckoutDir
 }
 
 Project -[hidden]> Component

@@ -14,7 +14,7 @@ This schema describes the structure of the devfile object
 
 | Property                  | Type       | Required     | Nullable | Defined by                   |
 | ------------------------- | ---------- | ------------ | -------- | ---------------------------- |
-| [apiVersion](#apiversion) | `string`   | **Required** | No       | Devfile object (this schema) |
+| [apiVersion](#apiversion) | `const`    | **Required** | No       | Devfile object (this schema) |
 | [attributes](#attributes) | `object`   | Optional     | No       | Devfile object (this schema) |
 | [commands](#commands)     | `object[]` | Optional     | No       | Devfile object (this schema) |
 | [components](#components) | `object[]` | Optional     | No       | Devfile object (this schema) |
@@ -28,14 +28,10 @@ This schema describes the structure of the devfile object
 `apiVersion`
 
 - is **required**
-- type: `string`
+- type: `const`
 - defined in this schema
 
-### apiVersion Type
-
-`string`
-
-### apiVersion Example
+The value of this property **must** be equal to:
 
 ```json
 "1.0.0"
@@ -507,7 +503,7 @@ Describes the project's source - type and location
 `object` with following properties:
 
 | Property            | Type   | Required     |
-| ------------        | ------ | ------------ |
+| ------------------- | ------ | ------------ |
 | `branch`            | string | Optional     |
 | `commitId`          | string | Optional     |
 | `location`          | string | **Required** |
@@ -595,23 +591,23 @@ Part of project to populate in the working directory.
 
 ##### sparseCheckoutDir Examples
 
-```
+```json
 /core/
 ```
 
-```
+```json
 core/
 ```
 
-```
+```json
 core
 ```
 
-```
+```json
 /wsmaster/che-core-api-workspace/
 ```
 
-```
+```json
 /d*
 ```
 

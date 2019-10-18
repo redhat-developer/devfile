@@ -33,11 +33,8 @@
     "additionalProperties": false,
     "properties": {
         "apiVersion": {
-            "type": "string",
-            "title": "Devfile API Version",
-            "examples": [
-                "1.0.0"
-            ]
+            "const": "1.0.0",
+            "title": "Devfile API Version"
         },
         "metadata": {
             "type": "object",
@@ -152,13 +149,13 @@
                             },
                             "sparseCheckoutDir": {
                                 "type": "string",
-                                "description": "Allows populating the working directory sparsely",
+                                "description": "Part of project to populate in the working directory.",
                                 "examples": [
-                                  "/core/",
-                                  "core/",
-                                  "core",
-                                  "/wsmaster/che-core-api-workspace/",
-                                  "/d*"
+                                    "/core/",
+                                    "core/",
+                                    "core",
+                                    "/wsmaster/che-core-api-workspace/",
+                                    "/d*"
                                 ]
                             }
                         }
@@ -312,7 +309,11 @@
                                             "{\"java.home\": \"/home/user/jdk11\", \"java.jdt.ls.vmargs\": \"-Xmx1G\"}"
                                         ],
                                         "additionalProperties": {
-                                            "type": "string"
+                                            "type": [
+                                                "boolean",
+                                                "string",
+                                                "number"
+                                            ]
                                         }
                                     }
                                 }
