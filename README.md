@@ -15,3 +15,9 @@ See explained devfile documentation with examples at https://redhat-developer.gi
 ![devfile](devfile_next.png)
 
 [Diagram source (plantuml)](devfile_next.plantuml)
+
+## Experimental beta version (Preview URL)
+
+![devfile](devfile_beta.png)
+
+[Diagram source (plantuml)](devfile_beta.plantuml)
