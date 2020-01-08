@@ -43,7 +43,6 @@ components:
 For the detailed explanation of all devfile components assignment and possible values, please see the following resources:
  - [Specification repository](https://github.com/redhat-developer/devfile)  
  - [detailed json-schema documentation](https://redhat-developer.github.io/devfile/devfile).
- - [1.0.1-beta json-schema documentation](https://redhat-developer.github.io/devfile/beta/devfile).
 
 
 ### Getting Started
