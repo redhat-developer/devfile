@@ -24,5 +24,5 @@ REPO_DIR=$( realpath "${REPO_DIR}")
 docker run -it --rm \
 -v "${DEVFILE_JSON}":/home/node/devfile.json:Z \
 -v "${REPO_DIR}":/home/node/devfile:Z \
-node /bin/bash -c \
-"npm install -g @adobe/jsonschema2md; jsonschema2md -d /home/node/devfile.json -o /home/node/devfile;"
+node:8 /bin/bash -c \
+"npm install -g @adobe/jsonschema2md@3.3.1; jsonschema2md -d /home/node/devfile.json -o /home/node/devfile;"

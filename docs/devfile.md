@@ -76,6 +76,7 @@ All items must be of the type: `object` with following properties:
 | `actions`    | array  | **Required** |
 | `attributes` |        | Optional     |
 | `name`       | string | **Required** |
+| `previewUrl` | object | Optional     |
 
 #### actions
 
@@ -229,7 +230,7 @@ Working directory where the command should be executed
 ##### workdir Example
 
 ```json
-/projects/spring-petclinic
+/projects/ginprs - petclinic
 ```
 
 #### attributes
@@ -264,6 +265,47 @@ Describes the name of the command. Should be unique per commands set.
 build
 ```
 
+#### previewUrl
+
+`previewUrl`
+
+- is optional
+- type: `object`
+
+##### previewUrl Type
+
+`object` with following properties:
+
+| Property | Type   | Required     |
+| -------- | ------ | ------------ |
+| `path`   | string | Optional     |
+| `port`   | number | **Required** |
+
+#### path
+
+`path`
+
+- is optional
+- type: `string`
+
+##### path Type
+
+`string`
+
+#### port
+
+`port`
+
+- is **required**
+- type: `number`
+
+##### port Type
+
+`number`
+
+- minimum value: `0`
+- maximum value: `65535`
+
 ## components
 
 ### The Components List
@@ -285,6 +327,7 @@ All items must be of the type: `object` with following properties:
 | Property       | Type    | Required     | Default   |
 | -------------- | ------- | ------------ | --------- |
 | `alias`        | string  | Optional     |           |
+| `env`          | array   | Optional     |           |
 | `mountSources` | boolean | Optional     | `"false"` |
 | `type`         |         | **Required** |           |
 
@@ -307,6 +350,58 @@ optional but must be unique in the devfile if specified.
 ```json
 mvn - stack
 ```
+
+#### env
+
+The environment variables list that should be set to docker container
+
+`env`
+
+- is optional
+- type: `object[]`
+
+##### env Type
+
+Array type: `object[]`
+
+All items must be of the type: `object` with following properties:
+
+| Property | Type   | Required     |
+| -------- | ------ | ------------ |
+| `name`   | string | **Required** |
+| `value`  | string | **Required** |
+
+#### name
+
+##### The Environment Variable Name
+
+The environment variable name
+
+`name`
+
+- is **required**
+- type: `string`
+
+##### name Type
+
+`string`
+
+#### value
+
+##### The Environment Variable Value
+
+The environment variable value
+
+`value`
+
+- is **required**
+- type: `string`
+
+##### value Type
+
+`string`
+
+Describes environment variable
 
 #### mountSources
 
