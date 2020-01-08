@@ -39,10 +39,12 @@ Component <|-.. CheEditor
 
 class Command {
   - name
+  - previewUrl
   - actions
 }
 
 Command *-- "n" CommandAction
+Command <|-.. PreviewUrl
 CommandAction o-- Component
 
 class CommandAction {
@@ -52,6 +54,11 @@ class CommandAction {
   - reference
   - referenceContent
   - workdir
+}
+
+class PreviewUrl {
+  - port
+  - path
 }
 
 class Project {
