@@ -1,8 +1,8 @@
-# devfile
+# devfile v1
 
-This repository contains the specs, docs and examples of the devfile.
+This repository contains the specs, docs and examples of the devfile v1. Devfile v2 specification doc is [here](https://devfile.github.io/website/devfile/index.html) instead. 
 
-See explained devfile documentation with examples at https://redhat-developer.github.io/devfile/
+See explained devfile v1 documentation with examples at https://redhat-developer.github.io/devfile/
 
 ## First Generation:
 
