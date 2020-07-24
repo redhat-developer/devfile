@@ -2,7 +2,7 @@
 
 [![Contribute](https://che.openshift.io/factory/resources/factory-contribute.svg)](https://che.openshift.io/f?url=https://github.com/redhat-developer/devfile)
 
-This repository contains the specs, docs and examples of the devfile v1. Devfile v2 specification doc is [here](https://devfile.github.io/website/devfile/index.html) instead. 
+For Devfile v2, spec, docs and examples are located [here](https://devfile.github.io/devfile/index.html) instead. 
 
 See explained devfile v1 documentation with examples at https://redhat-developer.github.io/devfile/
 
