@@ -14,7 +14,8 @@ objects:
   spec:
     replicas: 1
     selector:
-      name: web
+      matchLabels:
+        app: nodejs
     template:
       metadata:
         labels:
@@ -64,7 +65,7 @@ objects:
     selector:
       app: nodejs
 -
-  apiVersion: v1
+  apiVersion: route.openshift.io/v1
   kind: Route
   metadata:
     name: che

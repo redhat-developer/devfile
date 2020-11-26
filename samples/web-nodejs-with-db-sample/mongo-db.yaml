@@ -10,6 +10,9 @@ items:
       name: mongo
     name: mongo-controller
   spec:
+    selector:
+      matchLabels:
+        name: mongo
     template:
       metadata:
         labels:
@@ -36,7 +39,6 @@ items:
     name: mongo
     labels:
       name: mongo
-    name: mongo
   spec:
     ports:
       - port: 27017
