@@ -77,4 +77,4 @@ objects:
       targetPort: web
 parameters:
 - name: NODEJS_IMAGE
-  value: "node:0.10.40"
+  value: "node:12.18"
