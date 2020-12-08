@@ -6,7 +6,7 @@ projects:
     source:
       type: git
       location: 'https://github.com/ijason/NodeJS-Sample-App.git'
-      commitId: 187d46d83b705d723e8fff67ed2197a1b8c36
+      commitId: 187d468
 components:
   - type: kubernetes
     reference: mongo-db.yaml
