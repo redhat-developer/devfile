@@ -5,8 +5,8 @@ projects:
   - name: nodejs-mongo-app
     source:
       type: git
-      location: 'https://github.com/sunix/NodeJS-Sample-App.git'
-      branch: express-3
+      location: 'https://github.com/ijason/NodeJS-Sample-App.git'
+      commitId: 187d46d83b705d723e8fff67ed2197a1b8c36
 components:
   - type: kubernetes
     reference: mongo-db.yaml
