@@ -37,6 +37,9 @@ objects:
          - name: projects
            persistentVolumeClaim:
              claimName: projects
+        env:
+         - name: HOME
+           value: '/projects'
 -
   apiVersion: v1
   kind: PersistentVolumeClaim
