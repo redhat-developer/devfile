@@ -18,4 +18,4 @@ commands:
     actions:
       - type: exec
         component: nodejs-app
-        command: export HOME=${CHE_PROJECTS_ROOT}; cd ${CHE_PROJECTS_ROOT}/nodejs-mongo-app/EmployeeDB/ && npm install && sed -i -- ''s/localhost/mongo/g'' app.js && node app.js
+        command: cd ${CHE_PROJECTS_ROOT}/nodejs-mongo-app/EmployeeDB/ && npm install && sed -i -- ''s/localhost/mongo/g'' app.js && node app.js
