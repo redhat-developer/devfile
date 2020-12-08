@@ -5,7 +5,8 @@ projects:
   - name: nodejs-mongo-app
     source:
       type: git
-      location: 'https://github.com/ijason/NodeJS-Sample-App.git'
+      location: 'https://github.com/sunix/NodeJS-Sample-App.git'
+      branch: express-3
 components:
   - type: kubernetes
     reference: mongo-db.yaml
@@ -17,4 +18,4 @@ commands:
     actions:
       - type: exec
         component: nodejs-app
-        command: cd ${CHE_PROJECTS_ROOT}/nodejs-mongo-app/EmployeeDB/ && npm install && sed -i -- ''s/localhost/mongo/g'' app.js && node app.js
+        command: export HOME=${CHE_PROJECTS_ROOT}; cd ${CHE_PROJECTS_ROOT}/nodejs-mongo-app/EmployeeDB/ && npm install && sed -i -- ''s/localhost/mongo/g'' app.js && node app.js
