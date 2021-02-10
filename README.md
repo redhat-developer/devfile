@@ -4,7 +4,7 @@
 
 This repository contains the specs, docs and examples of the Devfile v1.
 
-For Devfile v2 go [here](https://devfile.github.io/devfile/index.html). 
+For Devfile v2 go [here](https://devfile.github.io). 
 
 See explained devfile v1 documentation with examples at https://redhat-developer.github.io/devfile/
 
