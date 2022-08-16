@@ -2,9 +2,9 @@
 
 [![Contribute](https://www.eclipse.org/che/factory-contribute.svg)](https://che.openshift.io/f?url=https://github.com/redhat-developer/devfile)
 
-⚠️ This repository contains the specs, docs and examples of the Devfile v1.
+⚠️ This repository contains some information about the first version of the Devfile specification and **is currently deprecated**.
 
-⚠️ For Devfile v2 go [here](https://docs.devfile.io). 
+⚠️ For the current Devfile specification go [here](https://devfile.io). 
 
 See explained devfile v1 documentation with examples at https://redhat-developer.github.io/devfile/
 
