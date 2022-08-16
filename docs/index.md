@@ -1,5 +1,5 @@
 
-⚠️ v1 of the Devfile is deprecated. Documentation for v2 can be found [here](https://docs.devfile.io).
+⚠️ v1 of the Devfile is deprecated. Documentation for v2 can be found [here](https://devfile.io).
 
 ### Introduction
 Previously, two kind of recipes were available to bootstrap a cloud developer workspace and to make it portable: [Chefile](https://www.eclipse.org/che/docs/chefile.html)
