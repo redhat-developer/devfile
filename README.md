@@ -1,6 +1,6 @@
 # devfile v1
 
-[![Contribute](https://www.eclipse.org/che/factory-contribute.svg)](https://che.openshift.io/f?url=https://github.com/redhat-developer/devfile)
+[![Contribute](https://www.eclipse.org/che/factory-contribute.svg)](https://workspaces.openshift.com/f?url=https://github.com/redhat-developer/devfile)
 
 ⚠️ This repository contains some information about the first version of the Devfile specification and **is currently deprecated**.
 
